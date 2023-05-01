@@ -25,11 +25,13 @@ InputDecoration kInputDecoration(String label) {
     labelText: label,
     labelStyle: GoogleFonts.rubik(),
     contentPadding: const EdgeInsets.all(10),
-    focusedBorder: const OutlineInputBorder(
-      borderSide: BorderSide(color: primaryColor),
+    focusedBorder: OutlineInputBorder(
+      borderSide: const BorderSide(color: primaryColor),
+      borderRadius: BorderRadius.circular(20),
     ),
-    border: const OutlineInputBorder(
-      borderSide: BorderSide(width: 1, color: Colors.black),
+    border: OutlineInputBorder(
+      borderSide: const BorderSide(width: 1, color: Colors.black),
+      borderRadius: BorderRadius.circular(20),
     ),
   );
 }
@@ -92,7 +94,12 @@ TextButton kTextButton(String label, Function onPressed) {
       backgroundColor: MaterialStateColor.resolveWith(
           (states) => const Color.fromRGBO(196, 0, 117, 1)),
       padding: MaterialStateProperty.resolveWith(
-        (states) => const EdgeInsets.symmetric(vertical: 10),
+        (states) => const EdgeInsets.symmetric(vertical: 15),
+      ),
+      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+        RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20.0),
+        ),
       ),
     ),
     onPressed: () => onPressed(),

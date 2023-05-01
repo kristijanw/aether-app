@@ -12,9 +12,9 @@ class Repairman {
   // function to convert json data to user model
   factory Repairman.fromJson(Map<String, dynamic> json) {
     return Repairman(
-      id: json['repairman']['id'],
-      name: json['repairman']['name'],
-      email: json['repairman']['email'],
+      id: json['id'],
+      name: json['name'],
+      email: json['email'],
     );
   }
 

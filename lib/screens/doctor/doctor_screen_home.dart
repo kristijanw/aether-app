@@ -81,7 +81,8 @@ class _DoctorScreenState extends State<DoctorScreen> {
           'Aktivni servisi',
           style: GoogleFonts.rubik(
             textStyle: const TextStyle(
-              fontSize: 18,
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
             ),
           ),
         ),
@@ -101,7 +102,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
             width: double.infinity,
             height: size.height / 6,
             child: ListView.builder(
-              padding: const EdgeInsets.only(bottom: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
               itemCount:
                   _postListAktivno.length < 2 ? _postListAktivno.length : 2,
               shrinkWrap: true,
@@ -113,12 +114,16 @@ class _DoctorScreenState extends State<DoctorScreen> {
               },
             ),
           ),
+          const SizedBox(
+            height: 20,
+          ),
         },
         Text(
           'Servisi na čekanju',
           style: GoogleFonts.rubik(
             textStyle: const TextStyle(
-              fontSize: 18,
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
             ),
           ),
         ),
@@ -138,7 +143,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
             width: double.infinity,
             height: size.height / 6,
             child: ListView.builder(
-              padding: const EdgeInsets.only(bottom: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
               itemCount:
                   _postListCekanje.length < 2 ? _postListCekanje.length : 2,
               shrinkWrap: true,
@@ -150,12 +155,16 @@ class _DoctorScreenState extends State<DoctorScreen> {
               },
             ),
           ),
+          const SizedBox(
+            height: 20,
+          ),
         },
         Text(
           'Gotovi servisi',
           style: GoogleFonts.rubik(
             textStyle: const TextStyle(
-              fontSize: 18,
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
             ),
           ),
         ),

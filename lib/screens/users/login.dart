@@ -6,7 +6,7 @@ import 'package:app/screens/users/register.dart';
 import 'package:app/services/user_service.dart';
 import 'package:app/widgets/widget_title.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Login extends StatefulWidget {
@@ -46,6 +46,7 @@ class _LoginState extends State<Login> {
     await pref.setInt('userId', user.id ?? 0);
     await pref.setString('userName', user.name ?? '');
 
+    if (!mounted) return;
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(builder: (context) => BottomNavigation()),
       (route) => false,
@@ -55,17 +56,23 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: WidgetTitle(title: 'Prijava'),
         centerTitle: true,
-        backgroundColor: primaryColor,
-        foregroundColor: Colors.white,
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+        elevation: 0,
+        toolbarHeight: 100,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(32.0),
+        padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
-            Image.asset('assets/logo.png'),
+            SvgPicture.asset(
+              'assets/logo.svg',
+              width: 100,
+            ),
             const SizedBox(
               height: 30,
             ),

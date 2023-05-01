@@ -24,14 +24,24 @@ class _ListPostState extends State<ListPost> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
     return Container(
-      width: 250,
+      width: size.width / 1.5,
       decoration: BoxDecoration(
-        // color: Colors.red,
+        color: Colors.white,
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: primaryColor),
+        // border: Border.all(color: primaryColor),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.2),
+            spreadRadius: 5,
+            blurRadius: 7,
+            offset: const Offset(0, 3),
+          ),
+        ],
       ),
-      margin: const EdgeInsets.only(right: 10),
+      margin: const EdgeInsets.only(right: 20),
       child: GestureDetector(
         onTap: () {
           Navigator.of(context).push(
@@ -57,7 +67,7 @@ class _ListPostState extends State<ListPost> {
                       overflow: TextOverflow.ellipsis,
                       style: GoogleFonts.rubik(
                         textStyle: const TextStyle(
-                          fontSize: 20,
+                          fontSize: 18,
                         ),
                       ),
                     ),
@@ -132,7 +142,7 @@ class _ListPostState extends State<ListPost> {
                           width: 5,
                         ),
                         Text(
-                          '${widget.post.date}',
+                          '${widget.post.createdAt}',
                           style: GoogleFonts.rubik(),
                         ),
                       ],
@@ -173,7 +183,7 @@ class _ListPostState extends State<ListPost> {
                           width: 5,
                         ),
                         Text(
-                          '${widget.post.date}',
+                          '${widget.post.createdAt}',
                           style: GoogleFonts.rubik(),
                         ),
                       ],

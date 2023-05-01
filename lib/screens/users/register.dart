@@ -6,6 +6,7 @@ import 'package:app/screens/users/login.dart';
 import 'package:app/services/user_service.dart';
 import 'package:app/widgets/widget_title.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Register extends StatefulWidget {
@@ -37,6 +38,8 @@ class _RegisterState extends State<Register> {
       setState(() {
         loading = !loading;
       });
+
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('${response.error}')),
       );
@@ -49,6 +52,8 @@ class _RegisterState extends State<Register> {
     await pref.setString('token', user.token ?? '');
     await pref.setString('role', user.role ?? '');
     await pref.setInt('userId', user.id ?? 0);
+
+    if (!mounted) return;
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(builder: (context) => BottomNavigation()),
       (route) => false,
@@ -58,17 +63,23 @@ class _RegisterState extends State<Register> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: WidgetTitle(title: 'Registracija'),
         centerTitle: true,
-        backgroundColor: primaryColor,
-        foregroundColor: Colors.white,
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+        elevation: 0,
+        toolbarHeight: 100,
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
-            Image.asset('assets/logo.png'),
+            SvgPicture.asset(
+              'assets/logo.svg',
+              width: 100,
+            ),
             const SizedBox(
               height: 30,
             ),
@@ -77,9 +88,6 @@ class _RegisterState extends State<Register> {
                 key: formKey,
                 child: ListView(
                   children: [
-                    const SizedBox(
-                      height: 20,
-                    ),
                     TextFormField(
                       controller: nameController,
                       validator: (val) =>

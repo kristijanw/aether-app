@@ -93,9 +93,9 @@ class _MyListState extends State<MyList> {
             ),
             Expanded(
               child: GridView.count(
-                padding: const EdgeInsets.only(bottom: 50),
+                padding: const EdgeInsets.all(10),
                 crossAxisCount: 2,
-                mainAxisSpacing: 10,
+                mainAxisSpacing: 20,
                 children: _postList.where((element) {
                   if (sortByStatus != '') {
                     Post post = element;

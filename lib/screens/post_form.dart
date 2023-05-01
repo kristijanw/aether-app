@@ -3,8 +3,6 @@ import 'dart:io';
 import 'package:app/constant.dart';
 import 'package:app/models/api_response.dart';
 import 'package:app/screens/bottom_navigation.dart';
-import 'package:app/screens/my_home.dart';
-import 'package:app/screens/mylists.dart';
 import 'package:app/screens/users/login.dart';
 import 'package:app/services/posts_services.dart';
 import 'package:app/services/user_service.dart';
@@ -37,6 +35,7 @@ class _PostFormState extends State<PostForm> {
   ];
   late String dropdownValue;
   bool isChecked = false;
+  String roleName = '';
 
   Future getImage() async {
     final pickedFile = await _picker.getImage(source: ImageSource.gallery);
@@ -87,32 +86,12 @@ class _PostFormState extends State<PostForm> {
     }
   }
 
-  // edit post
-  void _editPost(int postId) async {
-    ApiResponse response = await editPost(postId, _txtControllerBody.text);
-    if (response.error == null) {
-      Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(
-          builder: (context) => const MyList(),
-        ),
-        (route) => false,
-      );
-    } else if (response.error == unauthorized) {
-      logout().then(
-        (value) => {
-          Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(
-              builder: (context) => const Login(),
-            ),
-            (route) => false,
-          )
-        },
-      );
-    } else {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('${response.error}')));
+  Future getRoleName() async {
+    final role = await getRole();
+
+    if (role != '') {
       setState(() {
-        _loading = !_loading;
+        roleName = role;
       });
     }
   }
@@ -120,6 +99,7 @@ class _PostFormState extends State<PostForm> {
   @override
   void initState() {
     super.initState();
+    getRoleName();
     dropdownValue = list.first;
   }
 

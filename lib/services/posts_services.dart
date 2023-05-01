@@ -17,9 +17,6 @@ Future<ApiResponse> getPosts() async {
 
     String url = role == 'admin' ? postsURL : myPostsUrl;
 
-    print(role);
-    print(url);
-
     final response = await http.get(
       Uri.parse(url),
       headers: {'Accept': 'application/json', 'Authorization': 'Bearer $token'},
@@ -41,7 +38,8 @@ Future<ApiResponse> getPosts() async {
         break;
     }
   } catch (e) {
-    log('getPosts');
+    log('getPostsError');
+    print(e);
     apiResponse.error = serverError;
   }
 

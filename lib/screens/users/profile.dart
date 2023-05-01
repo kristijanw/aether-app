@@ -113,30 +113,6 @@ class _ProfileState extends State<Profile> {
                       ),
                     ],
                   ),
-                  Center(
-                    child: GestureDetector(
-                      child: Container(
-                        width: 110,
-                        height: 110,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(60),
-                            image: _imageFile == null
-                                ? user!.image != null
-                                    ? DecorationImage(
-                                        image: NetworkImage('${user!.image}'),
-                                        fit: BoxFit.cover,
-                                      )
-                                    : null
-                                : DecorationImage(
-                                    image: FileImage(_imageFile ?? File('')),
-                                    fit: BoxFit.cover),
-                            color: Colors.amber),
-                      ),
-                      onTap: () {
-                        getImage();
-                      },
-                    ),
-                  ),
                   const SizedBox(
                     height: 20,
                   ),

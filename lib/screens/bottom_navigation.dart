@@ -3,15 +3,33 @@ import 'package:app/screens/my_home.dart';
 import 'package:app/screens/mylists.dart';
 import 'package:app/screens/post_form.dart';
 import 'package:app/screens/users/profile.dart';
+import 'package:app/services/user_service.dart';
 import 'package:flutter/material.dart';
 
 class BottomNavigation extends StatefulWidget {
+  const BottomNavigation({super.key});
+
   @override
   _BottomNavigationState createState() => _BottomNavigationState();
 }
 
 class _BottomNavigationState extends State<BottomNavigation> {
   int currentIndex = 0;
+  String roleName = '';
+
+  void getRoleName() async {
+    await getRole().then((value) {
+      setState(() {
+        roleName = value;
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getRoleName();
+  }
 
   final screens = [
     const MyHome(),
@@ -23,23 +41,26 @@ class _BottomNavigationState extends State<BottomNavigation> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: screens[currentIndex],
-      floatingActionButton: SizedBox(
-        width: 50,
-        height: 50,
-        child: FloatingActionButton(
-          mini: true,
-          elevation: 0,
-          backgroundColor: primaryColor,
-          onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => const PostForm(),
+      floatingActionButton: roleName != 'admin'
+          ? SizedBox(
+              width: 50,
+              height: 50,
+              child: FloatingActionButton(
+                mini: true,
+                elevation: 0,
+                backgroundColor: primaryColor,
+                onPressed: () async {
+                  if (!mounted) return;
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const PostForm(),
+                    ),
+                  );
+                },
+                child: const Icon(Icons.add),
               ),
-            );
-          },
-          child: const Icon(Icons.add),
-        ),
-      ),
+            )
+          : Container(),
       floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
       bottomNavigationBar: BottomAppBar(
         height: 60,

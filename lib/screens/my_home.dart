@@ -7,6 +7,7 @@ import 'package:app/screens/users/login.dart';
 import 'package:app/services/posts_services.dart';
 import 'package:app/services/user_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class MyHome extends StatefulWidget {
@@ -63,54 +64,42 @@ class _MyHomeState extends State<MyHome> {
         : SafeArea(
             child: ListView(
               children: [
-                Padding(
-                  padding:
-                      const EdgeInsets.only(left: 20, right: 20, bottom: 0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            'Dobrodošao ${user!.name}',
-                            style: GoogleFonts.rubik(
-                              textStyle: const TextStyle(
-                                fontSize: 20,
+                SizedBox(
+                  height: MediaQuery.of(context).size.height,
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      left: 20,
+                      right: 20,
+                      bottom: 0,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                'Dobrodošao ${user!.name}',
+                                style: GoogleFonts.rubik(
+                                  textStyle: const TextStyle(
+                                    fontSize: 25,
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
-                          if (user!.role == 'korisnik') ...{
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            const Icon(
-                              Icons.emoji_emotions,
-                              color: primaryColor,
-                              size: 30.0,
-                            ),
-                          },
-                          if (user!.role == 'serviser') ...{
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            const Icon(
-                              Icons.settings,
-                              color: primaryColor,
-                              size: 30.0,
-                            ),
-                          }
-                        ],
-                      ),
-                      if (user!.role != 'admin') ...{
-                        DoctorScreen(),
-                      },
-                      if (user!.role != 'korisnik') ...{
-                        const AdminScreen(),
-                      }
-                    ],
+                          ],
+                        ),
+                        if (user!.role != 'admin') ...{
+                          DoctorScreen(),
+                        },
+                        if (user!.role != 'korisnik') ...{
+                          const AdminScreen(),
+                        }
+                      ],
+                    ),
                   ),
                 ),
               ],
