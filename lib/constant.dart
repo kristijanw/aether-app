@@ -18,6 +18,16 @@ const serverError = 'Server error';
 const unauthorized = 'Unauthorized';
 const somethingWentWrong = 'Something went wrong, try again!';
 
+// Linear gradietn
+const linearGradient = LinearGradient(
+  begin: Alignment.bottomRight,
+  end: Alignment.topLeft,
+  colors: [
+    Color.fromRGBO(178, 40, 113, 1),
+    Color.fromRGBO(236, 0, 140, 1),
+  ],
+);
+
 // --- input decoration
 InputDecoration kInputDecoration(String label) {
   return InputDecoration(
@@ -90,24 +100,21 @@ Color txtColorStatus(String status) {
 // button
 TextButton kTextButton(String label, Function onPressed) {
   return TextButton(
-    style: ButtonStyle(
-      backgroundColor: MaterialStateColor.resolveWith(
-          (states) => const Color.fromRGBO(196, 0, 117, 1)),
-      padding: MaterialStateProperty.resolveWith(
-        (states) => const EdgeInsets.symmetric(vertical: 15),
-      ),
-      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-        RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20.0),
-        ),
-      ),
-    ),
     onPressed: () => onPressed(),
-    child: Text(
-      label,
-      style: GoogleFonts.rubik(
-        textStyle: const TextStyle(
-          color: Colors.white,
+    child: Ink(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
+      decoration: const BoxDecoration(
+        gradient: linearGradient,
+        borderRadius: BorderRadius.all(Radius.circular(80.0)),
+      ),
+      child: Text(
+        label,
+        textAlign: TextAlign.center,
+        style: GoogleFonts.rubik(
+          textStyle: const TextStyle(
+            color: Colors.white,
+          ),
         ),
       ),
     ),

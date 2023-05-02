@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:app/constant.dart';
 import 'package:app/models/api_response.dart';
-import 'package:app/screens/bottom_navigation.dart';
 import 'package:app/screens/users/login.dart';
 import 'package:app/services/posts_services.dart';
 import 'package:app/services/user_service.dart';
@@ -10,9 +9,10 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class PostFormAdmin extends StatefulWidget {
-  PostFormAdmin({super.key, this.selectedDate});
+  PostFormAdmin({super.key, this.selectedDate, this.closeDialog});
 
   DateTime? selectedDate;
+  Function? closeDialog;
 
   @override
   State<PostFormAdmin> createState() => _PostFormAdminState();
@@ -32,9 +32,16 @@ class _PostFormAdminState extends State<PostFormAdmin> {
     'Uređaj 3',
     'Uređaj 4'
   ];
+  List listServiser = [
+    {'id': 0, 'name': 'odaberi servisera'},
+    {'id': 0, 'name': 'Pero Peric'},
+    {'id': 0, 'name': 'Marko Maric'},
+  ];
   late String dropdownValue;
+  late String serviserValue;
   bool isChecked = false;
   String roleName = '';
+  bool created = false;
 
   Future getImage() async {
     final pickedFile = await _picker.getImage(source: ImageSource.gallery);
@@ -43,6 +50,10 @@ class _PostFormAdminState extends State<PostFormAdmin> {
         _imageFile = File(pickedFile.path);
       });
     }
+  }
+
+  void _checkPost() {
+    widget.closeDialog;
   }
 
   void _createPost() async {
@@ -54,12 +65,13 @@ class _PostFormAdminState extends State<PostFormAdmin> {
       'image': image ?? '',
       'name_device': dropdownValue.toString(),
       'guarantee': isChecked == true ? 'ima' : 'nema',
+      'arrival': widget.selectedDate.toString(),
     };
 
     ApiResponse response = await createPost(createDataPost);
 
     if (response.error == null) {
-      print('Uspješno kreiran servis');
+      _checkPost();
     } else if (response.error == unauthorized) {
       logout().then(
         (value) => {
@@ -72,8 +84,10 @@ class _PostFormAdminState extends State<PostFormAdmin> {
         },
       );
     } else {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('${response.error}')));
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('${response.error}')),
+      );
       setState(() {
         _loading = !_loading;
       });
@@ -84,14 +98,18 @@ class _PostFormAdminState extends State<PostFormAdmin> {
   void initState() {
     super.initState();
     dropdownValue = list.first;
-
-    print(widget.selectedDate);
+    serviserValue = listServiser.first['name'];
   }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(20.0),
+      padding: const EdgeInsets.only(
+        top: 20,
+        left: 20,
+        right: 20,
+        bottom: 0,
+      ),
       child: Column(
         children: [
           Container(
@@ -200,6 +218,42 @@ class _PostFormAdminState extends State<PostFormAdmin> {
                       ),
                       const Text('Garancija'),
                     ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  DropdownButtonFormField(
+                    value: serviserValue,
+                    hint: const Text(
+                      'odaberi servisera',
+                    ),
+                    isExpanded: true,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          width: 1,
+                          color: Colors.black38,
+                        ),
+                      ),
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        serviserValue = value.toString();
+                      });
+                    },
+                    onSaved: (value) {
+                      setState(() {
+                        serviserValue = value.toString();
+                      });
+                    },
+                    items: listServiser.map((serviser) {
+                      return DropdownMenuItem(
+                        value: serviser['name'],
+                        child: Text(
+                          serviser['name'],
+                        ),
+                      );
+                    }).toList(),
                   ),
                   const SizedBox(
                     height: 10,

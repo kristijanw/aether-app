@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:app/constant.dart';
 import 'package:app/models/api_response.dart';
 import 'package:app/models/post.dart';
+import 'package:app/screens/post_details_screen.dart';
 import 'package:app/screens/post_form_admin.dart';
 import 'package:app/screens/users/login.dart';
 import 'package:app/services/posts_services.dart';
@@ -16,7 +17,9 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 class AdminScreen extends StatefulWidget {
-  const AdminScreen({super.key});
+  AdminScreen({super.key, this.setDate});
+
+  Function? setDate;
 
   @override
   State<AdminScreen> createState() => _AdminScreenState();
@@ -51,7 +54,7 @@ class _AdminScreenState extends State<AdminScreen> {
           final date = dateFormat.format(
             DateFormat("dd.MM.yyyy").parse(post.arrival.toString()),
           );
-          final event = {"opis": opis, "naziv": naziv};
+          final event = post;
 
           if (mySelectedEvents.containsKey(date)) {
             mySelectedEvents[date]!.add(event);
@@ -75,78 +78,11 @@ class _AdminScreenState extends State<AdminScreen> {
     }
   }
 
-  _showAddEventDialog() async {
-    await showDialog(
-      context: context,
-      builder: (context) => Dialog(
-        insetPadding: const EdgeInsets.all(20),
-        elevation: 0,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: SizedBox(
-          height: MediaQuery.of(context).size.height * 0.70,
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    'Novi servis',
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.rubik(
-                      textStyle: const TextStyle(
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                  PostFormAdmin(selectedDate: _selectedDate),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: TextButton(
-                        onPressed: () => Navigator.pop(context),
-                        style: ButtonStyle(
-                          foregroundColor: MaterialStateColor.resolveWith(
-                            (states) => Colors.white,
-                          ),
-                          backgroundColor: MaterialStateColor.resolveWith(
-                            (states) => const Color.fromRGBO(196, 0, 117, 1),
-                          ),
-                          padding: MaterialStateProperty.resolveWith(
-                            (states) =>
-                                const EdgeInsets.symmetric(vertical: 15),
-                          ),
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20.0),
-                            ),
-                          ),
-                        ),
-                        child: const Text('Odustani'),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
   @override
   void initState() {
     super.initState();
     _selectedDate = _focusedDay;
+    widget.setDate!(_selectedDate);
     loadPreviousEvents();
   }
 
@@ -156,34 +92,10 @@ class _AdminScreenState extends State<AdminScreen> {
 
     return Padding(
       padding: const EdgeInsets.only(
-        top: 20,
+        top: 10,
       ),
       child: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextButton(
-              style: TextButton.styleFrom(
-                backgroundColor: Colors.black,
-                padding: const EdgeInsets.only(left: 10, right: 10),
-                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                alignment: Alignment.centerLeft,
-              ),
-              onPressed: () => _showAddEventDialog(),
-              child: Text(
-                'Dodaj novi servis',
-                style: GoogleFonts.rubik(
-                  textStyle: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          SizedBox(
-            height: size.height * 0.01,
-          ),
           TableCalendar(
             locale: 'hr_HR',
             firstDay: DateTime.utc(2010, 10, 16),
@@ -197,6 +109,8 @@ class _AdminScreenState extends State<AdminScreen> {
                   _selectedDate = selectedDay;
                   _focusedDay = focusedDay;
                 });
+
+                widget.setDate!(_selectedDate);
               }
             },
             selectedDayPredicate: (day) {
@@ -218,25 +132,102 @@ class _AdminScreenState extends State<AdminScreen> {
           ),
           const Divider(
             height: 30,
-            color: primaryColor,
+            color: Colors.black,
           ),
           SizedBox(
             height: size.height * 0.30,
             child: ListView(
               children: _listOfDayServis(_selectedDate!).map((servis) {
-                return ListTile(
-                  leading: const Icon(
-                    Icons.done,
-                    color: primaryColor,
-                  ),
-                  title: Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
-                    child: Text('Naziv:   ${servis['naziv']}'),
-                  ),
-                  subtitle: Text(
-                    'Opis:   ${servis['opis']}',
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
+                Post post = servis;
+
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => PostView(post: post),
+                        maintainState: false,
+                      ),
+                    );
+                  },
+                  child: Container(
+                    padding: EdgeInsets.all(size.width * 0.04),
+                    decoration: const BoxDecoration(
+                      color: Color.fromARGB(221, 65, 65, 65),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10.0),
+                      ),
+                    ),
+                    margin: const EdgeInsets.only(bottom: 10),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              '${post.title}',
+                              style: GoogleFonts.rubik(
+                                textStyle: const TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 14,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                            Text(
+                              '${post.arrival}',
+                              style: GoogleFonts.rubik(
+                                textStyle: const TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 14,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: size.height * 0.01,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              post.repairman != null
+                                  ? '${post.repairman!.name}'
+                                  : 'Serviser nije odabran',
+                              style: GoogleFonts.rubik(
+                                textStyle: const TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 14,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.all(5),
+                              decoration: BoxDecoration(
+                                color: bgColorStatus(
+                                  post.status!.statusName.toString(),
+                                ),
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(10.0),
+                                ),
+                              ),
+                              child: Text(
+                                '${post.status!.statusName}',
+                                style: GoogleFonts.rubik(
+                                  textStyle: TextStyle(
+                                    color: txtColorStatus(
+                                      post.status!.statusName.toString(),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 );
               }).toList(),
