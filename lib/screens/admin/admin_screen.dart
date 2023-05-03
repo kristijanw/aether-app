@@ -1,21 +1,15 @@
-import 'dart:convert';
-
 import 'package:app/constant.dart';
 import 'package:app/models/api_response.dart';
 import 'package:app/models/post.dart';
 import 'package:app/screens/post_details_screen.dart';
-import 'package:app/screens/post_form_admin.dart';
-import 'package:app/screens/users/login.dart';
 import 'package:app/services/posts_services.dart';
-import 'package:app/services/user_service.dart';
-import 'package:app/widgets/widget_post.dart';
-import 'package:app/widgets/widget_title.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
+// ignore: must_be_immutable
 class AdminScreen extends StatefulWidget {
   AdminScreen({super.key, this.setDate});
 
@@ -48,8 +42,6 @@ class _AdminScreenState extends State<AdminScreen> {
         Post post = element;
 
         if (post.arrival != null) {
-          final opis = post.body;
-          final naziv = post.title;
           final dateFormat = DateFormat("yyyy-MM-dd");
           final date = dateFormat.format(
             DateFormat("dd.MM.yyyy").parse(post.arrival.toString()),
@@ -102,6 +94,25 @@ class _AdminScreenState extends State<AdminScreen> {
             lastDay: DateTime.utc(2030, 3, 14),
             focusedDay: DateTime.now(),
             calendarFormat: _calendarFormat,
+            rowHeight: 40,
+            headerStyle: const HeaderStyle(
+              formatButtonVisible: false,
+              titleCentered: true,
+            ),
+            calendarStyle: const CalendarStyle(
+              selectedDecoration: BoxDecoration(
+                color: primaryColor,
+                shape: BoxShape.circle,
+              ),
+              markerDecoration: BoxDecoration(
+                color: Color.fromARGB(255, 213, 124, 181),
+                shape: BoxShape.circle,
+              ),
+              todayDecoration: BoxDecoration(
+                color: Color.fromARGB(123, 0, 0, 0),
+                shape: BoxShape.circle,
+              ),
+            ),
             onDaySelected: (selectedDay, focusedDay) {
               if (!isSameDay(_selectedDate, selectedDay)) {
                 // Call `setState()` when updating the selected day
@@ -125,7 +136,6 @@ class _AdminScreenState extends State<AdminScreen> {
               }
             },
             onPageChanged: (focusedDay) {
-              // No need to call `setState()` here
               _focusedDay = focusedDay;
             },
             eventLoader: _listOfDayServis,
@@ -135,98 +145,109 @@ class _AdminScreenState extends State<AdminScreen> {
             color: Colors.black,
           ),
           SizedBox(
-            height: size.height * 0.30,
+            height: size.height * 0.35,
             child: ListView(
               children: _listOfDayServis(_selectedDate!).map((servis) {
                 Post post = servis;
 
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => PostView(post: post),
-                        maintainState: false,
-                      ),
-                    );
-                  },
-                  child: Container(
-                    padding: EdgeInsets.all(size.width * 0.04),
-                    decoration: const BoxDecoration(
-                      color: Color.fromARGB(221, 65, 65, 65),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(10.0),
-                      ),
-                    ),
-                    margin: const EdgeInsets.only(bottom: 10),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              '${post.title}',
-                              style: GoogleFonts.rubik(
-                                textStyle: const TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 14,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                            Text(
-                              '${post.arrival}',
-                              style: GoogleFonts.rubik(
-                                textStyle: const TextStyle(
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 14,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ],
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => PostView(post: post),
+                          maintainState: false,
                         ),
-                        SizedBox(
-                          height: size.height * 0.01,
+                      );
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(size.width * 0.04),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(10.0),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              post.repairman != null
-                                  ? '${post.repairman!.name}'
-                                  : 'Serviser nije odabran',
-                              style: GoogleFonts.rubik(
-                                textStyle: const TextStyle(
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 14,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              padding: const EdgeInsets.all(5),
-                              decoration: BoxDecoration(
-                                color: bgColorStatus(
-                                  post.status!.statusName.toString(),
-                                ),
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(10.0),
-                                ),
-                              ),
-                              child: Text(
-                                '${post.status!.statusName}',
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.2),
+                            spreadRadius: 5,
+                            blurRadius: 7,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      margin: const EdgeInsets.only(bottom: 10),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                '${post.title}',
                                 style: GoogleFonts.rubik(
-                                  textStyle: TextStyle(
-                                    color: txtColorStatus(
-                                      post.status!.statusName.toString(),
+                                  textStyle: const TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 14,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                              Text(
+                                '${post.arrival}',
+                                style: GoogleFonts.rubik(
+                                  textStyle: const TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 14,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: size.height * 0.01,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                post.repairman != null
+                                    ? '${post.repairman!.name}'
+                                    : 'Serviser nije odabran',
+                                style: GoogleFonts.rubik(
+                                  textStyle: const TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 14,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.all(5),
+                                decoration: BoxDecoration(
+                                  color: bgColorStatus(
+                                    post.status!.statusName.toString(),
+                                  ),
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(10.0),
+                                  ),
+                                ),
+                                child: Text(
+                                  '${post.status!.statusName}',
+                                  style: GoogleFonts.rubik(
+                                    textStyle: TextStyle(
+                                      color: txtColorStatus(
+                                        post.status!.statusName.toString(),
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 );

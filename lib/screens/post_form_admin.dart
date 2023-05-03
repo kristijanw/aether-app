@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:app/constant.dart';
 import 'package:app/models/api_response.dart';
+import 'package:app/screens/bottom_navigation.dart';
 import 'package:app/screens/users/login.dart';
 import 'package:app/services/posts_services.dart';
 import 'package:app/services/user_service.dart';
@@ -9,10 +10,10 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class PostFormAdmin extends StatefulWidget {
-  PostFormAdmin({super.key, this.selectedDate, this.closeDialog});
+  PostFormAdmin({super.key, this.selectedDate, required this.dialogContext});
 
   DateTime? selectedDate;
-  Function? closeDialog;
+  BuildContext dialogContext;
 
   @override
   State<PostFormAdmin> createState() => _PostFormAdminState();
@@ -32,16 +33,27 @@ class _PostFormAdminState extends State<PostFormAdmin> {
     'Uređaj 3',
     'Uređaj 4'
   ];
-  List listServiser = [
-    {'id': 0, 'name': 'odaberi servisera'},
-    {'id': 0, 'name': 'Pero Peric'},
-    {'id': 0, 'name': 'Marko Maric'},
-  ];
+  late List listServiser;
   late String dropdownValue;
   late String serviserValue;
+  late int serviserIDValue;
   bool isChecked = false;
   String roleName = '';
   bool created = false;
+
+  void setServiser() {
+    final listServiserData = [
+      {'id': 0, 'name': 'odaberi servisera'},
+      {'id': 2, 'name': 'Pero Peric'},
+      {'id': 3, 'name': 'Marko Maric'},
+    ];
+
+    setState(() {
+      listServiser = listServiserData;
+      serviserValue = listServiser.first['name'];
+      serviserIDValue = listServiser.first['id'];
+    });
+  }
 
   Future getImage() async {
     final pickedFile = await _picker.getImage(source: ImageSource.gallery);
@@ -52,8 +64,15 @@ class _PostFormAdminState extends State<PostFormAdmin> {
     }
   }
 
-  void _checkPost() {
-    widget.closeDialog;
+  void _checkPost() async {
+    Navigator.pop(widget.dialogContext);
+
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(
+        builder: (context) => const BottomNavigation(),
+      ),
+      (route) => false,
+    );
   }
 
   void _createPost() async {
@@ -66,6 +85,7 @@ class _PostFormAdminState extends State<PostFormAdmin> {
       'name_device': dropdownValue.toString(),
       'guarantee': isChecked == true ? 'ima' : 'nema',
       'arrival': widget.selectedDate.toString(),
+      'repairman': serviserIDValue.toString(),
     };
 
     ApiResponse response = await createPost(createDataPost);
@@ -98,7 +118,7 @@ class _PostFormAdminState extends State<PostFormAdmin> {
   void initState() {
     super.initState();
     dropdownValue = list.first;
-    serviserValue = listServiser.first['name'];
+    setServiser();
   }
 
   @override
@@ -240,11 +260,27 @@ class _PostFormAdminState extends State<PostFormAdmin> {
                       setState(() {
                         serviserValue = value.toString();
                       });
+
+                      for (var serviser in listServiser) {
+                        if (serviserValue == serviser['name']) {
+                          setState(() {
+                            serviserIDValue = serviser['id'];
+                          });
+                        }
+                      }
                     },
                     onSaved: (value) {
                       setState(() {
                         serviserValue = value.toString();
                       });
+
+                      for (var serviser in listServiser) {
+                        if (serviserValue == serviser['name']) {
+                          setState(() {
+                            serviserIDValue = serviser['id'];
+                          });
+                        }
+                      }
                     },
                     items: listServiser.map((serviser) {
                       return DropdownMenuItem(

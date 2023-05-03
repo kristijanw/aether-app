@@ -15,7 +15,7 @@ Future<ApiResponse> getPosts() async {
     String token = await getToken();
     String role = await getRole();
 
-    String url = role == 'admin' ? postsURL : myPostsUrl;
+    String url = role != 'korisnik' ? postsURL : myPostsUrl;
 
     final response = await http.get(
       Uri.parse(url),

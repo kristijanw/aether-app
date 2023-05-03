@@ -34,7 +34,7 @@ class _LoadingState extends State<Loading> {
       if (response.error == null) {
         if (!mounted) return;
         Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => BottomNavigation()),
+          MaterialPageRoute(builder: (context) => const BottomNavigation()),
           (route) => false,
         );
       } else if (response.error == unauthorized) {

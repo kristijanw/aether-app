@@ -21,10 +21,6 @@ class _MyHomeState extends State<MyHome> {
   User? user;
   DateTime? _selectedDate;
 
-  void closeDialog() {
-    Navigator.pop(context);
-  }
-
   _showAddEventDialog() async {
     await showDialog(
       context: context,
@@ -54,7 +50,7 @@ class _MyHomeState extends State<MyHome> {
                   ),
                   PostFormAdmin(
                     selectedDate: _selectedDate,
-                    closeDialog: closeDialog,
+                    dialogContext: context,
                   ),
                   Padding(
                     padding: const EdgeInsets.only(
@@ -159,63 +155,65 @@ class _MyHomeState extends State<MyHome> {
                   right: 20,
                   bottom: 0,
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            'Dobrodošao ${user!.name}',
-                            style: GoogleFonts.rubik(
-                              textStyle: const TextStyle(
-                                fontSize: 18,
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              '${user!.name}',
+                              style: GoogleFonts.rubik(
+                                textStyle: const TextStyle(
+                                  fontSize: 18,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        if (user!.role != 'korisnik') ...{
-                          TextButton(
-                            onPressed: () => _showAddEventDialog(),
-                            child: Ink(
-                              width: size.width * 0.30,
-                              padding: EdgeInsets.symmetric(
-                                horizontal: size.width * 0.01,
-                                vertical: 10,
-                              ),
-                              decoration: const BoxDecoration(
-                                gradient: linearGradient,
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(80.0),
+                          if (user!.role != 'korisnik') ...{
+                            TextButton(
+                              onPressed: () => _showAddEventDialog(),
+                              child: Ink(
+                                width: size.width * 0.30,
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: size.width * 0.01,
+                                  vertical: 10,
                                 ),
-                              ),
-                              child: Text(
-                                'Dodaj servis',
-                                style: GoogleFonts.rubik(
-                                  textStyle: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14,
+                                decoration: const BoxDecoration(
+                                  gradient: linearGradient,
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(80.0),
                                   ),
                                 ),
-                                textAlign: TextAlign.center,
+                                child: Text(
+                                  'Dodaj servis',
+                                  style: GoogleFonts.rubik(
+                                    textStyle: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
                               ),
                             ),
-                          ),
-                        }
-                      ],
-                    ),
-                    if (user!.role != 'admin') ...{
-                      DoctorScreen(),
-                    },
-                    if (user!.role != 'korisnik') ...{
-                      AdminScreen(
-                        setDate: updateSelectedDate,
+                          }
+                        ],
                       ),
-                    }
-                  ],
+                      if (user!.role == 'korisnik') ...{
+                        DoctorScreen(),
+                      },
+                      if (user!.role != 'korisnik') ...{
+                        AdminScreen(
+                          setDate: updateSelectedDate,
+                        ),
+                      }
+                    ],
+                  ),
                 ),
               ),
             ),
