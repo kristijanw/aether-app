@@ -5,6 +5,7 @@ import 'dart:io';
 
 import 'package:app/constant.dart';
 import 'package:app/models/api_response.dart';
+import 'package:app/models/repairman.dart';
 import 'package:app/models/user.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -68,6 +69,38 @@ Future<ApiResponse> register(Map dataPost) async {
     log('register');
     apiResponse.error = serverError;
   }
+  return apiResponse;
+}
+
+Future<ApiResponse> getRepairMan() async {
+  ApiResponse apiResponse = ApiResponse();
+  try {
+    String token = await getToken();
+
+    String url = getRepairMans;
+
+    final response = await http.get(
+      Uri.parse(url),
+      headers: {'Accept': 'application/json', 'Authorization': 'Bearer $token'},
+    );
+
+    switch (response.statusCode) {
+      case 200:
+        apiResponse.data = jsonDecode(response.body);
+        break;
+      case 401:
+        apiResponse.error = unauthorized;
+        break;
+      default:
+        apiResponse.error = somethingWentWrong;
+        break;
+    }
+  } catch (e) {
+    log('getRepairMan');
+    print(e);
+    apiResponse.error = serverError;
+  }
+
   return apiResponse;
 }
 

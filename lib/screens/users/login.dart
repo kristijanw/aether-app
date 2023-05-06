@@ -31,6 +31,8 @@ class _LoginState extends State<Login> {
       setState(() {
         loading = false;
       });
+
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('${response.error}'),
@@ -48,7 +50,7 @@ class _LoginState extends State<Login> {
 
     if (!mounted) return;
     Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (context) => BottomNavigation()),
+      MaterialPageRoute(builder: (context) => const BottomNavigation()),
       (route) => false,
     );
   }
@@ -57,79 +59,82 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: WidgetTitle(title: 'Prijava'),
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        elevation: 0,
-        toolbarHeight: 100,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          children: [
-            SvgPicture.asset(
-              'assets/logo.svg',
-              width: 100,
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            Expanded(
-              child: Form(
-                key: formkey,
-                child: ListView(
-                  children: [
-                    TextFormField(
-                      keyboardType: TextInputType.emailAddress,
-                      controller: txtEmail,
-                      validator: (val) =>
-                          val!.isEmpty ? 'Nevažeća adresa e-pošte' : null,
-                      decoration: kInputDecoration('Email'),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    TextFormField(
-                      controller: txtPassword,
-                      obscureText: true,
-                      validator: (val) => val!.length < 6
-                          ? 'Potrebno najmanje 6 znakova'
-                          : null,
-                      decoration: kInputDecoration('Lozinka'),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    loading
-                        ? const Center(
-                            child: CircularProgressIndicator(),
-                          )
-                        : kTextButton('Prijava', () {
-                            if (formkey.currentState!.validate()) {
-                              setState(() {
-                                loading = true;
-                                _loginUser();
-                              });
-                            }
-                          }),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    kLoginRegisterHint('Nemate račun? ', 'Registracija', () {
-                      Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(
-                          builder: (context) => Register(),
-                        ),
-                        (route) => false,
-                      );
-                    })
-                  ],
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            children: [
+              SvgPicture.asset(
+                'assets/logo.svg',
+                width: 100,
+              ),
+              const SizedBox(
+                height: 40,
+              ),
+              WidgetTitle(title: 'Prijava'),
+              const SizedBox(
+                height: 40,
+              ),
+              Expanded(
+                child: Form(
+                  key: formkey,
+                  child: ListView(
+                    children: [
+                      TextFormField(
+                        keyboardType: TextInputType.emailAddress,
+                        controller: txtEmail,
+                        validator: (val) =>
+                            val!.isEmpty ? 'Nevažeća adresa e-pošte' : null,
+                        decoration: kInputDecoration('Email'),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      TextFormField(
+                        controller: txtPassword,
+                        obscureText: true,
+                        validator: (val) => val!.length < 6
+                            ? 'Potrebno najmanje 6 znakova'
+                            : null,
+                        decoration: kInputDecoration('Lozinka'),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      loading
+                          ? const Center(
+                              child: CircularProgressIndicator(),
+                            )
+                          : kTextButton(
+                              'Prijava',
+                              () {
+                                if (formkey.currentState!.validate()) {
+                                  setState(
+                                    () {
+                                      loading = true;
+                                      _loginUser();
+                                    },
+                                  );
+                                }
+                              },
+                            ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      kLoginRegisterHint('Nemate račun? ', 'Registracija', () {
+                        Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                            builder: (context) => Register(),
+                          ),
+                          (route) => false,
+                        );
+                      })
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

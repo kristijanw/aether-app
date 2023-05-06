@@ -42,7 +42,7 @@ class _MyHomeState extends State<MyHome> {
                   Text(
                     'Novi servis',
                     textAlign: TextAlign.center,
-                    style: GoogleFonts.rubik(
+                    style: GoogleFonts.montserrat(
                       textStyle: const TextStyle(
                         fontSize: 20,
                       ),
@@ -79,7 +79,7 @@ class _MyHomeState extends State<MyHome> {
                           ),
                           child: Text(
                             'Odustani',
-                            style: GoogleFonts.rubik(
+                            style: GoogleFonts.montserrat(
                               textStyle: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 14,
@@ -167,9 +167,9 @@ class _MyHomeState extends State<MyHome> {
                           Expanded(
                             child: Text(
                               '${user!.name}',
-                              style: GoogleFonts.rubik(
-                                textStyle: const TextStyle(
-                                  fontSize: 18,
+                              style: GoogleFonts.montserrat(
+                                textStyle: TextStyle(
+                                  fontSize: size.width * 0.06,
                                 ),
                               ),
                             ),
@@ -191,7 +191,7 @@ class _MyHomeState extends State<MyHome> {
                                 ),
                                 child: Text(
                                   'Dodaj servis',
-                                  style: GoogleFonts.rubik(
+                                  style: GoogleFonts.montserrat(
                                     textStyle: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 14,
@@ -203,6 +203,9 @@ class _MyHomeState extends State<MyHome> {
                             ),
                           }
                         ],
+                      ),
+                      const SizedBox(
+                        height: 20,
                       ),
                       if (user!.role == 'korisnik') ...{
                         DoctorScreen(),

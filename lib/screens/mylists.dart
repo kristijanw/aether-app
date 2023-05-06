@@ -4,7 +4,7 @@ import 'package:app/models/post.dart';
 import 'package:app/screens/users/login.dart';
 import 'package:app/services/posts_services.dart';
 import 'package:app/services/user_service.dart';
-import 'package:app/widgets/widget_post.dart';
+import 'package:app/widgets/post_card.dart';
 import 'package:app/widgets/widget_title.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -21,6 +21,7 @@ class _MyListState extends State<MyList> {
   int userId = 0;
   bool _loading = true;
   String sortByStatus = '';
+  String sortByPriority = '';
 
   // get all posts
   Future<void> retrievePosts() async {
@@ -59,93 +60,126 @@ class _MyListState extends State<MyList> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
-        child: Column(
-          children: [
-            WidgetTitle(title: 'Moja lista'),
-            const SizedBox(
-              height: 10,
-            ),
-            Row(
-              children: [
-                Text(
-                  'Sortiranje',
-                  style: GoogleFonts.rubik(
-                    textStyle: const TextStyle(
-                      fontSize: 20,
-                    ),
+    Size size = MediaQuery.of(context).size;
+
+    return _loading
+        ? const Center(child: CircularProgressIndicator())
+        : RefreshIndicator(
+            onRefresh: () => retrievePosts(),
+            child: SafeArea(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
+                  child: Column(
+                    children: [
+                      WidgetTitle(title: 'Popis servisa'),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        children: [
+                          sortButton('Aktivno', 'aktivno', 'status'),
+                          const SizedBox(width: 10),
+                          sortButton('Čekanje', 'cekanje', 'status'),
+                          const SizedBox(width: 10),
+                          sortButton('Gotovo', 'gotovo', 'status'),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          sortButton('Visok', 'visoka', 'priority'),
+                          const SizedBox(width: 10),
+                          sortButton('Srednji', 'srednja', 'priority'),
+                          const SizedBox(width: 10),
+                          sortButton('Niski', 'niska', 'priority'),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Column(
+                        children: _postList.where((element) {
+                          Post post = element;
+
+                          if (sortByStatus != '' && sortByPriority != '') {
+                            if (post.status!.statusName == sortByStatus &&
+                                post.priority.toString() == sortByPriority) {
+                              return true;
+                            } else {
+                              return false;
+                            }
+                          } else if (sortByStatus != '') {
+                            if (post.status!.statusName == sortByStatus) {
+                              return true;
+                            } else {
+                              return false;
+                            }
+                          } else if (sortByPriority != '') {
+                            if (post.priority.toString() == sortByPriority) {
+                              return true;
+                            } else {
+                              return false;
+                            }
+                          }
+
+                          return true;
+                        }).map((item) {
+                          Post post = item;
+
+                          // return ListPost(post: post, allPosts: true);
+                          return PostCard(post: post);
+                        }).toList(),
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(
-                  width: 20,
-                ),
-                sortButton('Aktivno', 'aktivno'),
-                const SizedBox(width: 10),
-                sortButton('Čekanje', 'cekanje'),
-                const SizedBox(width: 10),
-                sortButton('Gotovo', 'gotovo'),
-              ],
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Expanded(
-              child: GridView.count(
-                padding: const EdgeInsets.all(10),
-                crossAxisCount: 2,
-                mainAxisSpacing: 20,
-                children: _postList.where((element) {
-                  if (sortByStatus != '') {
-                    Post post = element;
-
-                    if (post.status!.statusName == sortByStatus) {
-                      return true;
-                    } else {
-                      return false;
-                    }
-                  } else {
-                    return true;
-                  }
-                }).map((item) {
-                  Post post = item;
-
-                  return ListPost(post: post, allPosts: true);
-                }).toList(),
               ),
             ),
-          ],
-        ),
-      ),
-    );
+          );
   }
 
-  TextButton sortButton(String title, String value) {
+  TextButton sortButton(String title, String value, String purpose) {
     return TextButton(
       style: ButtonStyle(
         backgroundColor: MaterialStateColor.resolveWith(
-          (states) => sortByStatus == value ? primaryColor : Colors.transparent,
+          (states) => sortByStatus == value || sortByPriority == value
+              ? primaryColor
+              : Colors.transparent,
         ),
         padding: MaterialStateProperty.resolveWith(
-          (states) => const EdgeInsets.symmetric(vertical: 10),
+          (states) => const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
         ),
         side: MaterialStateProperty.resolveWith<BorderSide>(
           (states) => const BorderSide(
             color: primaryColor,
           ),
         ),
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(18.0),
+          ),
+        ),
       ),
       onPressed: () {
-        setState(() {
-          sortByStatus = sortByStatus == value ? '' : value;
-        });
+        if (purpose == 'status') {
+          setState(() {
+            sortByStatus = sortByStatus == value ? '' : value;
+          });
+        }
+
+        if (purpose == 'priority') {
+          setState(() {
+            sortByPriority = sortByPriority == value ? '' : value;
+          });
+        }
       },
       child: Text(
         title,
-        style: GoogleFonts.rubik(
+        style: GoogleFonts.montserrat(
           textStyle: TextStyle(
-            color: sortByStatus == value ? Colors.white : Colors.black,
+            color: sortByStatus == value || sortByPriority == value
+                ? Colors.white
+                : Colors.black,
           ),
         ),
       ),

@@ -44,7 +44,6 @@ class _LoadingState extends State<Loading> {
           (route) => false,
         );
       } else {
-        if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text('${response.error}'),
         ));

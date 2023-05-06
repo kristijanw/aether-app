@@ -4,7 +4,7 @@ import 'package:app/models/post.dart';
 import 'package:app/screens/users/login.dart';
 import 'package:app/services/posts_services.dart';
 import 'package:app/services/user_service.dart';
-import 'package:app/widgets/widget_post.dart';
+import 'package:app/widgets/post_card.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -79,20 +79,24 @@ class _DoctorScreenState extends State<DoctorScreen> {
         ),
         Text(
           'Aktivni servisi',
-          style: GoogleFonts.rubik(
+          style: GoogleFonts.montserrat(
             textStyle: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w700,
             ),
           ),
         ),
-        const SizedBox(
-          height: 10,
+        SizedBox(
+          height: size.height * 0.01,
         ),
         if (_postListAktivno.isEmpty) ...{
           Text(
             'Trenutno nema aktivnih servisa',
-            style: GoogleFonts.rubik(),
+            style: GoogleFonts.montserrat(
+              textStyle: const TextStyle(
+                fontSize: 15,
+              ),
+            ),
           ),
           const SizedBox(
             height: 20,
@@ -100,17 +104,22 @@ class _DoctorScreenState extends State<DoctorScreen> {
         } else ...{
           SizedBox(
             width: double.infinity,
-            height: size.height / 6,
-            child: ListView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+            height: size.height / 5,
+            child: ListView.separated(
+              separatorBuilder: (context, index) => SizedBox(
+                width: size.width * 0.05,
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 15),
               itemCount:
                   _postListAktivno.length < 2 ? _postListAktivno.length : 2,
-              shrinkWrap: true,
               scrollDirection: Axis.horizontal,
               itemBuilder: (BuildContext context, int index) {
                 Post post = _postListAktivno[index];
 
-                return ListPost(post: post);
+                return SizedBox(
+                  width: size.width * 0.70,
+                  child: PostCard(post: post),
+                );
               },
             ),
           ),
@@ -120,7 +129,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
         },
         Text(
           'Servisi na čekanju',
-          style: GoogleFonts.rubik(
+          style: GoogleFonts.montserrat(
             textStyle: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w700,
@@ -133,7 +142,11 @@ class _DoctorScreenState extends State<DoctorScreen> {
         if (_postListCekanje.isEmpty) ...{
           Text(
             'Trenutno nema servisa',
-            style: GoogleFonts.rubik(),
+            style: GoogleFonts.montserrat(
+              textStyle: const TextStyle(
+                fontSize: 15,
+              ),
+            ),
           ),
           const SizedBox(
             height: 20,
@@ -141,17 +154,22 @@ class _DoctorScreenState extends State<DoctorScreen> {
         } else ...{
           SizedBox(
             width: double.infinity,
-            height: size.height / 6,
-            child: ListView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+            height: size.height / 5,
+            child: ListView.separated(
+              separatorBuilder: (context, index) => SizedBox(
+                width: size.width * 0.05,
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 15),
               itemCount:
                   _postListCekanje.length < 2 ? _postListCekanje.length : 2,
-              shrinkWrap: true,
               scrollDirection: Axis.horizontal,
               itemBuilder: (BuildContext context, int index) {
                 Post post = _postListCekanje[index];
 
-                return ListPost(post: post);
+                return SizedBox(
+                  width: size.width * 0.70,
+                  child: PostCard(post: post),
+                );
               },
             ),
           ),
@@ -161,7 +179,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
         },
         Text(
           'Gotovi servisi',
-          style: GoogleFonts.rubik(
+          style: GoogleFonts.montserrat(
             textStyle: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w700,
@@ -174,27 +192,38 @@ class _DoctorScreenState extends State<DoctorScreen> {
         if (_postListGotovo.isEmpty) ...{
           Text(
             'Trenutno nema gotovih servisa',
-            style: GoogleFonts.rubik(),
+            style: GoogleFonts.montserrat(
+              textStyle: const TextStyle(
+                fontSize: 15,
+              ),
+            ),
           ),
         } else ...{
           SizedBox(
             width: double.infinity,
-            height: size.height / 6,
-            child: ListView.builder(
-              padding: const EdgeInsets.only(bottom: 20),
+            height: size.height / 5,
+            child: ListView.separated(
+              separatorBuilder: (context, index) => SizedBox(
+                width: size.width * 0.05,
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 15),
               itemCount:
                   _postListGotovo.length < 2 ? _postListGotovo.length : 2,
-              shrinkWrap: true,
               scrollDirection: Axis.horizontal,
               itemBuilder: (BuildContext context, int index) {
                 Post post = _postListGotovo[index];
 
-                return ListPost(post: post);
+                return SizedBox(
+                  width: size.width * 0.70,
+                  child: PostCard(post: post),
+                );
               },
             ),
           ),
+          const SizedBox(
+            height: 20,
+          ),
         },
-        const SizedBox(height: 40),
       ],
     );
   }

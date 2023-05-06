@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:app/constant.dart';
@@ -6,6 +7,7 @@ import 'package:app/screens/bottom_navigation.dart';
 import 'package:app/screens/users/login.dart';
 import 'package:app/services/posts_services.dart';
 import 'package:app/services/user_service.dart';
+import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -23,6 +25,9 @@ class _PostFormAdminState extends State<PostFormAdmin> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _txtControllerBody = TextEditingController();
   final TextEditingController _txtControllerTitle = TextEditingController();
+  final TextEditingController timeController = TextEditingController();
+  TimeOfDay selectedTime = const TimeOfDay(hour: 00, minute: 00);
+  late String _hour, _minute, _time;
   bool _loading = false;
   File? _imageFile;
   final _picker = ImagePicker();
@@ -33,23 +38,40 @@ class _PostFormAdminState extends State<PostFormAdmin> {
     'Uređaj 3',
     'Uređaj 4'
   ];
-  late List listServiser;
-  late String dropdownValue;
+  List<String> priority = <String>[
+    'važnost servisa',
+    'niska',
+    'srednja',
+    'visoka',
+  ];
+  List listServiser = [];
   late String serviserValue;
   late int serviserIDValue;
+  late String dropdownValue;
+  late String priorityValue;
   bool isChecked = false;
   String roleName = '';
   bool created = false;
 
-  void setServiser() {
-    final listServiserData = [
-      {'id': 0, 'name': 'odaberi servisera'},
-      {'id': 2, 'name': 'Pero Peric'},
-      {'id': 3, 'name': 'Marko Maric'},
-    ];
+  void getRepairMansAll() async {
+    ApiResponse response = await getRepairMan();
+    final data = jsonEncode(response.data);
+    Map<String, dynamic> responseJson = jsonDecode(data);
+    final repairmans = responseJson['repairmans'];
+
+    listServiser.add({
+      "id": 0,
+      "name": 'Odaberi servisera',
+    });
+
+    for (var repairman in repairmans) {
+      listServiser.add({
+        "id": repairman['id'],
+        "name": repairman['name'],
+      });
+    }
 
     setState(() {
-      listServiser = listServiserData;
       serviserValue = listServiser.first['name'];
       serviserIDValue = listServiser.first['id'];
     });
@@ -85,7 +107,9 @@ class _PostFormAdminState extends State<PostFormAdmin> {
       'name_device': dropdownValue.toString(),
       'guarantee': isChecked == true ? 'ima' : 'nema',
       'arrival': widget.selectedDate.toString(),
+      'time': timeController.text,
       'repairman': serviserIDValue.toString(),
+      'priority': priorityValue.toString(),
     };
 
     ApiResponse response = await createPost(createDataPost);
@@ -114,15 +138,37 @@ class _PostFormAdminState extends State<PostFormAdmin> {
     }
   }
 
+  Future<void> _selectTime(BuildContext context) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: selectedTime,
+    );
+    if (picked != null) {
+      setState(() {
+        selectedTime = picked;
+        _hour = selectedTime.hour.toString();
+        _minute = selectedTime.minute.toString();
+        _time = '$_hour : $_minute';
+        timeController.text = _time;
+        timeController.text = formatDate(
+            DateTime(2023, 01, 1, selectedTime.hour, selectedTime.minute),
+            [hh, ':', nn, " "]).toString();
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     dropdownValue = list.first;
-    setServiser();
+    priorityValue = priority.first;
+    getRepairMansAll();
   }
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
     return Padding(
       padding: const EdgeInsets.only(
         top: 20,
@@ -242,10 +288,96 @@ class _PostFormAdminState extends State<PostFormAdmin> {
                   const SizedBox(
                     height: 10,
                   ),
+                  InkWell(
+                    onTap: () {
+                      _selectTime(context);
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(4),
+                        border: Border.all(color: Colors.black38),
+                      ),
+                      child: TextFormField(
+                        style: const TextStyle(fontSize: 20),
+                        textAlign: TextAlign.center,
+                        onSaved: (val) {},
+                        enabled: false,
+                        keyboardType: TextInputType.text,
+                        controller: timeController,
+                        decoration: const InputDecoration(
+                          labelText: 'Vrijeme',
+                          disabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide.none,
+                          ),
+                          contentPadding: EdgeInsets.all(5),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  if (listServiser.isNotEmpty) ...{
+                    DropdownButtonFormField(
+                      value: serviserValue,
+                      hint: const Text(
+                        'odaberi servisera',
+                      ),
+                      isExpanded: true,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            width: 1,
+                            color: Colors.black38,
+                          ),
+                        ),
+                      ),
+                      onChanged: (value) {
+                        setState(() {
+                          serviserValue = value.toString();
+                        });
+
+                        for (var serviser in listServiser) {
+                          if (serviserValue == serviser['name']) {
+                            setState(() {
+                              serviserIDValue = serviser['id'];
+                            });
+                          }
+                        }
+                      },
+                      onSaved: (value) {
+                        setState(() {
+                          serviserValue = value.toString();
+                        });
+
+                        for (var serviser in listServiser) {
+                          if (serviserValue == serviser['name']) {
+                            setState(() {
+                              serviserIDValue = serviser['id'];
+                            });
+                          }
+                        }
+                      },
+                      items: listServiser.map((serviser) {
+                        return DropdownMenuItem(
+                          value: serviser['name'],
+                          child: Text(
+                            serviser['name'],
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                  },
                   DropdownButtonFormField(
-                    value: serviserValue,
+                    value: priorityValue,
                     hint: const Text(
-                      'odaberi servisera',
+                      'važnost servisa',
                     ),
                     isExpanded: true,
                     decoration: const InputDecoration(
@@ -258,35 +390,27 @@ class _PostFormAdminState extends State<PostFormAdmin> {
                     ),
                     onChanged: (value) {
                       setState(() {
-                        serviserValue = value.toString();
+                        priorityValue = value.toString();
                       });
-
-                      for (var serviser in listServiser) {
-                        if (serviserValue == serviser['name']) {
-                          setState(() {
-                            serviserIDValue = serviser['id'];
-                          });
-                        }
-                      }
                     },
                     onSaved: (value) {
                       setState(() {
-                        serviserValue = value.toString();
+                        priorityValue = value.toString();
                       });
-
-                      for (var serviser in listServiser) {
-                        if (serviserValue == serviser['name']) {
-                          setState(() {
-                            serviserIDValue = serviser['id'];
-                          });
-                        }
+                    },
+                    validator: (String? value) {
+                      if (value.toString().isEmpty ||
+                          value.toString() == 'važnost servisa') {
+                        return "Važnost mora biti odabrana";
+                      } else {
+                        return null;
                       }
                     },
-                    items: listServiser.map((serviser) {
+                    items: priority.map((String val) {
                       return DropdownMenuItem(
-                        value: serviser['name'],
+                        value: val,
                         child: Text(
-                          serviser['name'],
+                          val,
                         ),
                       );
                     }).toList(),

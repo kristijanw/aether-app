@@ -123,6 +123,129 @@ Future<ApiResponse> createPost(Map createDataPost) async {
   return apiResponse;
 }
 
+// Create post
+Future<ApiResponse> getStatusPostId(String postid) async {
+  ApiResponse apiResponse = ApiResponse();
+
+  try {
+    String token = await getToken();
+
+    final response = await http.get(
+      Uri.parse('$getStatusPostUrl/$postid'),
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    switch (response.statusCode) {
+      case 200:
+        apiResponse.data = jsonDecode(response.body);
+        break;
+      case 422:
+        final errors = jsonDecode(response.body)['errors'];
+        apiResponse.error = errors[errors.keys.elementAt(0)][0];
+        break;
+      case 401:
+        apiResponse.error = unauthorized;
+        break;
+      default:
+        print(response.body);
+        apiResponse.error = somethingWentWrong;
+        break;
+    }
+  } catch (e) {
+    log('$e');
+    log('getStatusPost');
+    apiResponse.error = serverError;
+  }
+  return apiResponse;
+}
+
+// Set Repairman
+Future<ApiResponse> saveRepairMan(Map createDataPost) async {
+  ApiResponse apiResponse = ApiResponse();
+  final postid = createDataPost["postid"];
+
+  try {
+    String token = await getToken();
+
+    final response = await http.put(
+      Uri.parse('$setRepairMan/$postid'),
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: createDataPost,
+    );
+
+    switch (response.statusCode) {
+      case 200:
+        apiResponse.data = jsonDecode(response.body);
+        break;
+      case 422:
+        final errors = jsonDecode(response.body)['errors'];
+        apiResponse.error = errors[errors.keys.elementAt(0)][0];
+        break;
+      case 401:
+        apiResponse.error = unauthorized;
+        break;
+      default:
+        print(response.body);
+        apiResponse.error = somethingWentWrong;
+        break;
+    }
+  } catch (e) {
+    log('$e');
+    log('setDateTime');
+    apiResponse.error = serverError;
+  }
+
+  return apiResponse;
+}
+
+// Create post
+Future<ApiResponse> updateDateAndTime(Map createDataPost) async {
+  ApiResponse apiResponse = ApiResponse();
+  final postid = createDataPost["postid"];
+
+  try {
+    String token = await getToken();
+
+    final response = await http.post(
+      Uri.parse('$setDateAndTime/$postid'),
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: createDataPost,
+    );
+
+    switch (response.statusCode) {
+      case 200:
+        apiResponse.data = jsonDecode(response.body);
+        break;
+      case 422:
+        final errors = jsonDecode(response.body)['errors'];
+        apiResponse.error = errors[errors.keys.elementAt(0)][0];
+        break;
+      case 401:
+        apiResponse.error = unauthorized;
+        break;
+      default:
+        print(response.body);
+        apiResponse.error = somethingWentWrong;
+        break;
+    }
+  } catch (e) {
+    log('$e');
+    log('setDateTime');
+    apiResponse.error = serverError;
+  }
+
+  return apiResponse;
+}
+
 // Edit post
 Future<ApiResponse> editPost(int postId, String body) async {
   ApiResponse apiResponse = ApiResponse();

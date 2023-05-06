@@ -10,6 +10,10 @@ const userURL = '$baseURL/user';
 const postsURL = '$baseURL/posts';
 const myPostsUrl = '$baseURL/my-posts';
 const myPostsStatus = '$baseURL/posts/status';
+const setDateAndTime = '$baseURL/post-update-datetime';
+const getStatusPostUrl = '$baseURL/post-get-status';
+const getRepairMans = '$baseURL/get-repairmans';
+const setRepairMan = '$baseURL/assign-user-post';
 
 const primaryColor = Color.fromRGBO(196, 0, 117, 1);
 
@@ -28,12 +32,36 @@ const linearGradient = LinearGradient(
   ],
 );
 
+// Message
+ScaffoldFeatureController<SnackBar, SnackBarClosedReason> statusMessage(
+  String message,
+  context,
+  String status,
+) {
+  return ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      backgroundColor: status == 'success' ? Colors.green : Colors.red,
+      padding: const EdgeInsets.all(20),
+      content: Text(
+        'Uspješno ažurirano',
+        style: GoogleFonts.montserrat(
+          textStyle: const TextStyle(
+            color: Colors.white,
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+    ),
+  );
+}
+
 // --- input decoration
 InputDecoration kInputDecoration(String label) {
   return InputDecoration(
     floatingLabelStyle: const TextStyle(color: primaryColor),
     labelText: label,
-    labelStyle: GoogleFonts.rubik(),
+    labelStyle: GoogleFonts.montserrat(),
     contentPadding: const EdgeInsets.all(10),
     focusedBorder: OutlineInputBorder(
       borderSide: const BorderSide(color: primaryColor),
@@ -59,7 +87,7 @@ TextButton viewAllBtn(String label, Function onPressed) {
     onPressed: () => onPressed(),
     child: Text(
       label,
-      style: GoogleFonts.rubik(
+      style: GoogleFonts.montserrat(
         textStyle: const TextStyle(
           color: Colors.white,
           fontSize: 10,
@@ -67,6 +95,20 @@ TextButton viewAllBtn(String label, Function onPressed) {
       ),
     ),
   );
+}
+
+Color priorityBgColor(String status) {
+  if (status == 'visoka') {
+    return Colors.red;
+  }
+  if (status == 'srednja') {
+    return Colors.orangeAccent;
+  }
+  if (status == 'niska') {
+    return Colors.grey;
+  }
+
+  return Colors.transparent;
 }
 
 Color bgColorStatus(String status) {
@@ -102,8 +144,7 @@ TextButton kTextButton(String label, Function onPressed) {
   return TextButton(
     onPressed: () => onPressed(),
     child: Ink(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
       decoration: const BoxDecoration(
         gradient: linearGradient,
         borderRadius: BorderRadius.all(Radius.circular(80.0)),
@@ -111,7 +152,7 @@ TextButton kTextButton(String label, Function onPressed) {
       child: Text(
         label,
         textAlign: TextAlign.center,
-        style: GoogleFonts.rubik(
+        style: GoogleFonts.montserrat(
           textStyle: const TextStyle(
             color: Colors.white,
           ),
@@ -130,7 +171,7 @@ Row kLoginRegisterHint(String text, String label, Function onTap) {
       GestureDetector(
         child: Text(
           label,
-          style: GoogleFonts.rubik(
+          style: GoogleFonts.montserrat(
             textStyle: const TextStyle(
               color: Color.fromRGBO(196, 0, 117, 1),
             ),

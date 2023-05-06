@@ -12,6 +12,8 @@ class Post {
   int? guarantee;
   int? sort;
   String? arrival;
+  String? time;
+  String? priority;
   String? image;
   String? updatedAt;
   String? createdAt;
@@ -29,6 +31,8 @@ class Post {
     this.guarantee,
     this.sort,
     this.arrival,
+    this.time,
+    this.priority,
     this.image,
     this.updatedAt,
     this.createdAt,
@@ -47,6 +51,8 @@ class Post {
     guarantee = json['guarantee'];
     sort = json['sort'];
     arrival = json['arrival'];
+    time = json['time'];
+    priority = json['priority'];
     image = json['image'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
@@ -68,6 +74,8 @@ class Post {
     data['guarantee'] = guarantee;
     data['sort'] = sort;
     data['arrival'] = arrival;
+    data['time'] = time;
+    data['priority'] = priority;
     data['image'] = image;
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;

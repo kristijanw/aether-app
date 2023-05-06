@@ -3,6 +3,7 @@ import 'package:app/models/api_response.dart';
 import 'package:app/models/post.dart';
 import 'package:app/screens/post_details_screen.dart';
 import 'package:app/services/posts_services.dart';
+import 'package:app/widgets/post_card.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -150,107 +151,7 @@ class _AdminScreenState extends State<AdminScreen> {
               children: _listOfDayServis(_selectedDate!).map((servis) {
                 Post post = servis;
 
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => PostView(post: post),
-                          maintainState: false,
-                        ),
-                      );
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(size.width * 0.04),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(10.0),
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.2),
-                            spreadRadius: 5,
-                            blurRadius: 7,
-                            offset: const Offset(0, 3),
-                          ),
-                        ],
-                      ),
-                      margin: const EdgeInsets.only(bottom: 10),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                '${post.title}',
-                                style: GoogleFonts.rubik(
-                                  textStyle: const TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 14,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ),
-                              Text(
-                                '${post.arrival}',
-                                style: GoogleFonts.rubik(
-                                  textStyle: const TextStyle(
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 14,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: size.height * 0.01,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                post.repairman != null
-                                    ? '${post.repairman!.name}'
-                                    : 'Serviser nije odabran',
-                                style: GoogleFonts.rubik(
-                                  textStyle: const TextStyle(
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 14,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                padding: const EdgeInsets.all(5),
-                                decoration: BoxDecoration(
-                                  color: bgColorStatus(
-                                    post.status!.statusName.toString(),
-                                  ),
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(10.0),
-                                  ),
-                                ),
-                                child: Text(
-                                  '${post.status!.statusName}',
-                                  style: GoogleFonts.rubik(
-                                    textStyle: TextStyle(
-                                      color: txtColorStatus(
-                                        post.status!.statusName.toString(),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                );
+                return PostCard(post: post);
               }).toList(),
             ),
           ),

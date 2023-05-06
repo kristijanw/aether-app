@@ -10,9 +10,9 @@ class WidgetTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       title,
-      style: GoogleFonts.genos(
+      style: GoogleFonts.montserrat(
         textStyle: const TextStyle(
-          fontSize: 30,
+          fontSize: 25,
         ),
       ),
     );

@@ -1,9 +1,8 @@
-import 'dart:io';
-
 import 'package:app/constant.dart';
 import 'package:app/models/post.dart';
-import 'package:app/screens/admin/admin_screen.dart';
 import 'package:app/services/user_service.dart';
+import 'package:app/widgets/set_datetime.dart';
+import 'package:app/widgets/set_repairman.dart';
 import 'package:app/widgets/widget_title.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -38,11 +37,14 @@ class _PostViewState extends State<PostView> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
     return Scaffold(
       appBar: AppBar(
         title: WidgetTitle(title: 'Detalji servisa'),
         backgroundColor: primaryColor,
         foregroundColor: Colors.white,
+        centerTitle: true,
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -54,7 +56,7 @@ class _PostViewState extends State<PostView> {
                 children: [
                   Text(
                     '${widget.post.title}',
-                    style: GoogleFonts.rubik(
+                    style: GoogleFonts.montserrat(
                       textStyle: const TextStyle(
                         fontSize: 25,
                       ),
@@ -78,7 +80,7 @@ class _PostViewState extends State<PostView> {
                     ),
                     child: Text(
                       '${widget.post.status!.statusName}',
-                      style: GoogleFonts.rubik(
+                      style: GoogleFonts.montserrat(
                         textStyle: TextStyle(
                           color: txtColorStatus(
                             widget.post.status!.statusName.toString(),
@@ -89,74 +91,74 @@ class _PostViewState extends State<PostView> {
                   ),
                   Text(
                     '${widget.post.user!.name}'.toUpperCase(),
-                    style: GoogleFonts.rubik(),
+                    style: GoogleFonts.montserrat(),
                   ),
                 ],
               ),
               const SizedBox(
                 height: 15,
               ),
-              if (widget.post.repairman != null) ...{
-                Row(
-                  children: [
-                    Text(
-                      'Servis preuzeo:',
-                      style: GoogleFonts.rubik(
-                        textStyle: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
+              Row(
+                children: [
+                  Text(
+                    'Servis preuzeo:',
+                    style: GoogleFonts.montserrat(
+                      textStyle: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
-                    const SizedBox(width: 5),
-                    Text(
-                      '${widget.post.repairman!.name}',
-                      style: GoogleFonts.rubik(
-                        textStyle: const TextStyle(
-                          fontWeight: FontWeight.w300,
-                          fontSize: 16,
-                        ),
+                  ),
+                  const SizedBox(width: 5),
+                  Text(
+                    widget.post.repairman != null
+                        ? '${widget.post.repairman!.name}'
+                        : 'Serviser nije odabran',
+                    style: GoogleFonts.montserrat(
+                      textStyle: const TextStyle(
+                        fontWeight: FontWeight.w300,
+                        fontSize: 16,
                       ),
                     ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
-              },
-              if (widget.post.repairman != null) ...{
-                Row(
-                  children: [
-                    Text(
-                      'Datum početka popravka:',
-                      style: GoogleFonts.rubik(
-                        textStyle: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              Row(
+                children: [
+                  Text(
+                    'Datum početka popravka:',
+                    style: GoogleFonts.montserrat(
+                      textStyle: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
-                    const SizedBox(width: 5),
-                    Text(
-                      '${widget.post.arrival}',
-                      style: GoogleFonts.rubik(
-                        textStyle: const TextStyle(
-                          fontWeight: FontWeight.w300,
-                          fontSize: 16,
-                        ),
+                  ),
+                  const SizedBox(width: 5),
+                  Text(
+                    widget.post.arrival != null
+                        ? '${widget.post.arrival}'
+                        : 'Nije odabran',
+                    style: GoogleFonts.montserrat(
+                      textStyle: const TextStyle(
+                        fontWeight: FontWeight.w300,
+                        fontSize: 16,
                       ),
                     ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
-              },
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 15,
+              ),
               Row(
                 children: [
                   Text(
                     'Garancija:',
-                    style: GoogleFonts.rubik(
+                    style: GoogleFonts.montserrat(
                       textStyle: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
@@ -166,7 +168,7 @@ class _PostViewState extends State<PostView> {
                   const SizedBox(width: 5),
                   Text(
                     widget.post.guarantee == 1 ? 'Ima' : 'Nema',
-                    style: GoogleFonts.rubik(
+                    style: GoogleFonts.montserrat(
                       textStyle: const TextStyle(
                         fontWeight: FontWeight.w300,
                         fontSize: 16,
@@ -182,7 +184,7 @@ class _PostViewState extends State<PostView> {
                 children: [
                   Text(
                     'Uređaj:',
-                    style: GoogleFonts.rubik(
+                    style: GoogleFonts.montserrat(
                       textStyle: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
@@ -192,7 +194,7 @@ class _PostViewState extends State<PostView> {
                   const SizedBox(width: 5),
                   Text(
                     '${widget.post.nameDevice}',
-                    style: GoogleFonts.rubik(
+                    style: GoogleFonts.montserrat(
                       textStyle: const TextStyle(
                         fontWeight: FontWeight.w300,
                         fontSize: 16,
@@ -206,7 +208,7 @@ class _PostViewState extends State<PostView> {
               ),
               Text(
                 'Opis:',
-                style: GoogleFonts.rubik(
+                style: GoogleFonts.montserrat(
                   textStyle: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
@@ -220,27 +222,26 @@ class _PostViewState extends State<PostView> {
                 children: [
                   Text(
                     '${widget.post.body}',
-                    style: GoogleFonts.rubik(),
+                    style: GoogleFonts.montserrat(),
                   ),
                 ],
               ),
               const SizedBox(
                 height: 20,
               ),
-              Text(
-                'Slika:',
-                style: GoogleFonts.rubik(
-                  textStyle: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
+              if (widget.post.image != null) ...{
+                Text(
+                  'Slika:',
+                  style: GoogleFonts.montserrat(
+                    textStyle: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              // ignore: dead_code
-              if (widget.post.image != null) ...{
+                const SizedBox(
+                  height: 5,
+                ),
                 Container(
                   width: double.infinity,
                   height: 180,
@@ -248,21 +249,6 @@ class _PostViewState extends State<PostView> {
                     image: DecorationImage(
                       image: NetworkImage('${widget.post.image}'),
                       fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-              } else ...{
-                Container(
-                  width: double.infinity,
-                  height: 180,
-                  decoration: const BoxDecoration(
-                    color: Colors.grey,
-                  ),
-                  child: const Center(
-                    child: Icon(
-                      Icons.image,
-                      size: 50,
-                      color: Colors.black38,
                     ),
                   ),
                 ),
@@ -275,17 +261,37 @@ class _PostViewState extends State<PostView> {
                   height: 2,
                   color: primaryColor,
                 ),
-                const SizedBox(
-                  height: 20,
+                SizedBox(
+                  height: size.height * 0.02,
                 ),
                 Text(
                   'Postavi datum i vrijeme',
-                  style: GoogleFonts.rubik(
+                  style: GoogleFonts.montserrat(
                     textStyle: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
+                ),
+                SetDateTime(
+                  postid: widget.post.id.toString(),
+                  post: widget.post,
+                ),
+                SizedBox(
+                  height: size.height * 0.02,
+                ),
+                Text(
+                  'Postavi servisera',
+                  style: GoogleFonts.montserrat(
+                    textStyle: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                SetRepairMan(
+                  postid: widget.post.id.toString(),
+                  post: widget.post,
                 ),
               },
             ],

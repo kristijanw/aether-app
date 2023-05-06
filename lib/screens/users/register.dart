@@ -55,7 +55,9 @@ class _RegisterState extends State<Register> {
 
     if (!mounted) return;
     Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (context) => BottomNavigation()),
+      MaterialPageRoute(
+        builder: (context) => const BottomNavigation(),
+      ),
       (route) => false,
     );
   }
@@ -64,100 +66,98 @@ class _RegisterState extends State<Register> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: WidgetTitle(title: 'Registracija'),
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        elevation: 0,
-        toolbarHeight: 100,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          children: [
-            SvgPicture.asset(
-              'assets/logo.svg',
-              width: 100,
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            Expanded(
-              child: Form(
-                key: formKey,
-                child: ListView(
-                  children: [
-                    TextFormField(
-                      controller: nameController,
-                      validator: (val) =>
-                          val!.isEmpty ? 'Polje je obavezno' : null,
-                      decoration: kInputDecoration('Ime'),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    TextFormField(
-                      controller: emailController,
-                      keyboardType: TextInputType.emailAddress,
-                      validator: (val) =>
-                          val!.isEmpty ? 'Polje je obavezno' : null,
-                      decoration: kInputDecoration('Email'),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    TextFormField(
-                      controller: passwordController,
-                      obscureText: true,
-                      validator: (val) => val!.length < 6
-                          ? 'Potrebno najmanje 6 znakova'
-                          : null,
-                      decoration: kInputDecoration('Lozinka'),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    TextFormField(
-                      controller: passwordConfirmController,
-                      obscureText: true,
-                      validator: (val) => val != passwordController.text
-                          ? 'Lozinka se ne podudara'
-                          : null,
-                      decoration: kInputDecoration('Potvrdi lozinku'),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    loading
-                        ? const Center(child: CircularProgressIndicator())
-                        : kTextButton(
-                            'Registracija',
-                            () {
-                              if (formKey.currentState!.validate()) {
-                                setState(() {
-                                  loading = !loading;
-                                  _registerUser();
-                                });
-                              }
-                            },
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            children: [
+              SvgPicture.asset(
+                'assets/logo.svg',
+                width: 100,
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              WidgetTitle(title: 'Registracija'),
+              const SizedBox(
+                height: 30,
+              ),
+              Expanded(
+                child: Form(
+                  key: formKey,
+                  child: ListView(
+                    children: [
+                      TextFormField(
+                        controller: nameController,
+                        validator: (val) =>
+                            val!.isEmpty ? 'Polje je obavezno' : null,
+                        decoration: kInputDecoration('Ime i prezime'),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      TextFormField(
+                        controller: emailController,
+                        keyboardType: TextInputType.emailAddress,
+                        validator: (val) =>
+                            val!.isEmpty ? 'Polje je obavezno' : null,
+                        decoration: kInputDecoration('Email'),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      TextFormField(
+                        controller: passwordController,
+                        obscureText: true,
+                        validator: (val) => val!.length < 6
+                            ? 'Potrebno najmanje 6 znakova'
+                            : null,
+                        decoration: kInputDecoration('Lozinka'),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      TextFormField(
+                        controller: passwordConfirmController,
+                        obscureText: true,
+                        validator: (val) => val != passwordController.text
+                            ? 'Lozinka se ne podudara'
+                            : null,
+                        decoration: kInputDecoration('Potvrdi lozinku'),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      loading
+                          ? const Center(child: CircularProgressIndicator())
+                          : kTextButton(
+                              'Registracija',
+                              () {
+                                if (formKey.currentState!.validate()) {
+                                  setState(() {
+                                    loading = !loading;
+                                    _registerUser();
+                                  });
+                                }
+                              },
+                            ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      kLoginRegisterHint('Već imate račun? ', 'Prijava', () {
+                        Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                            builder: (context) => const Login(),
                           ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    kLoginRegisterHint('Već imate račun? ', 'Prijava', () {
-                      Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(
-                          builder: (context) => const Login(),
-                        ),
-                        (route) => false,
-                      );
-                    })
-                  ],
+                          (route) => false,
+                        );
+                      })
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
