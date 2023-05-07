@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:app/constant.dart';
 import 'package:app/models/api_response.dart';
 import 'package:app/models/post.dart';
@@ -27,10 +29,12 @@ class _MyListState extends State<MyList> {
   Future<void> retrievePosts() async {
     userId = await getUserId();
     ApiResponse response = await getPosts();
+    final data = jsonEncode(response.data);
+    final responseJson = jsonDecode(data)['posts'];
 
     if (response.error == null) {
       setState(() {
-        _postList = response.data as List<dynamic>;
+        _postList = responseJson;
         _loading = _loading ? !_loading : _loading;
       });
     } else if (response.error == unauthorized) {
@@ -78,6 +82,15 @@ class _MyListState extends State<MyList> {
                       ),
                       Row(
                         children: [
+                          Text(
+                            'Status:',
+                            style: GoogleFonts.montserrat(
+                              textStyle: TextStyle(
+                                fontSize: size.width * 0.05,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 10),
                           sortButton('Aktivno', 'aktivno', 'status'),
                           const SizedBox(width: 10),
                           sortButton('Čekanje', 'cekanje', 'status'),
@@ -87,6 +100,15 @@ class _MyListState extends State<MyList> {
                       ),
                       Row(
                         children: [
+                          Text(
+                            'Prioritet:',
+                            style: GoogleFonts.montserrat(
+                              textStyle: TextStyle(
+                                fontSize: size.width * 0.05,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 10),
                           sortButton('Visok', 'visoka', 'priority'),
                           const SizedBox(width: 10),
                           sortButton('Srednji', 'srednja', 'priority'),
@@ -99,7 +121,7 @@ class _MyListState extends State<MyList> {
                       ),
                       Column(
                         children: _postList.where((element) {
-                          Post post = element;
+                          Post post = Post.fromJson(element);
 
                           if (sortByStatus != '' && sortByPriority != '') {
                             if (post.status!.statusName == sortByStatus &&
@@ -124,9 +146,8 @@ class _MyListState extends State<MyList> {
 
                           return true;
                         }).map((item) {
-                          Post post = item;
+                          Post post = Post.fromJson(item);
 
-                          // return ListPost(post: post, allPosts: true);
                           return PostCard(post: post);
                         }).toList(),
                       ),
@@ -141,13 +162,16 @@ class _MyListState extends State<MyList> {
   TextButton sortButton(String title, String value, String purpose) {
     return TextButton(
       style: ButtonStyle(
+        minimumSize: MaterialStateProperty.resolveWith<Size>(
+          (states) => const Size(50, 20),
+        ),
         backgroundColor: MaterialStateColor.resolveWith(
           (states) => sortByStatus == value || sortByPriority == value
               ? primaryColor
               : Colors.transparent,
         ),
         padding: MaterialStateProperty.resolveWith(
-          (states) => const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+          (states) => const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
         ),
         side: MaterialStateProperty.resolveWith<BorderSide>(
           (states) => const BorderSide(

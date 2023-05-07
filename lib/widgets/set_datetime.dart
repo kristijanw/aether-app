@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
+// ignore: must_be_immutable
 class SetDateTime extends StatefulWidget {
   SetDateTime({super.key, required this.postid, required this.post});
 
@@ -34,6 +35,21 @@ class _SetDateTimeState extends State<SetDateTime> {
       initialDatePickerMode: DatePickerMode.day,
       firstDate: DateTime(2023),
       lastDate: DateTime(2100),
+      builder: (context, child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            primaryColor: const Color(0xFF8CE7F1),
+            accentColor: const Color(0xFF8CE7F1),
+            colorScheme: const ColorScheme.light(
+              primary: Color.fromARGB(255, 187, 14, 95),
+            ),
+            buttonTheme: const ButtonThemeData(
+              textTheme: ButtonTextTheme.primary,
+            ),
+          ),
+          child: child!,
+        );
+      },
     );
 
     if (picked != null) {
@@ -49,6 +65,21 @@ class _SetDateTimeState extends State<SetDateTime> {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
       initialTime: selectedTime,
+      builder: (context, child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            primaryColor: const Color(0xFF8CE7F1),
+            accentColor: const Color(0xFF8CE7F1),
+            colorScheme: const ColorScheme.light(
+              primary: Color.fromARGB(255, 187, 14, 95),
+            ),
+            buttonTheme: const ButtonThemeData(
+              textTheme: ButtonTextTheme.primary,
+            ),
+          ),
+          child: child!,
+        );
+      },
     );
     if (picked != null) {
       setState(() {
@@ -118,106 +149,116 @@ class _SetDateTimeState extends State<SetDateTime> {
     Size size = MediaQuery.of(context).size;
 
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.only(
-            top: 10,
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              InkWell(
-                onTap: () {
-                  _selectDate(context);
-                },
-                child: Container(
-                  width: size.width / 2.5,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: primaryColor),
-                  ),
-                  child: TextFormField(
-                    style: const TextStyle(fontSize: 20),
-                    textAlign: TextAlign.center,
-                    enabled: false,
-                    keyboardType: TextInputType.text,
-                    controller: dateController,
-                    onSaved: (val) {},
-                    decoration: const InputDecoration(
-                      disabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide.none,
-                      ),
-                      contentPadding: EdgeInsets.only(top: 0),
-                    ),
-                  ),
-                ),
-              ),
-              InkWell(
-                onTap: () {
-                  _selectTime(context);
-                },
-                child: Container(
-                  width: size.width / 2.5,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: primaryColor),
-                  ),
-                  child: TextFormField(
-                    style: const TextStyle(fontSize: 20),
-                    textAlign: TextAlign.center,
-                    onSaved: (val) {},
-                    enabled: false,
-                    keyboardType: TextInputType.text,
-                    controller: timeController,
-                    decoration: const InputDecoration(
-                      disabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide.none,
-                      ),
-                      contentPadding: EdgeInsets.all(5),
-                    ),
-                  ),
-                ),
-              ),
-            ],
+        Text(
+          'Postavi datum i vrijeme',
+          style: GoogleFonts.montserrat(
+            textStyle: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+            ),
           ),
         ),
-        SizedBox(
-          height: size.height * 0.02,
-        ),
-        Align(
-          alignment: Alignment.centerLeft,
-          child: SizedBox(
-            width: size.width * 0.30,
-            child: TextButton(
-              onPressed: () => onSaveDateTime(),
-              child: Ink(
-                width: double.infinity,
-                padding: EdgeInsets.symmetric(
-                  horizontal: size.width * 0.01,
-                  vertical: 10,
-                ),
-                decoration: const BoxDecoration(
-                  gradient: linearGradient,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(80.0),
-                  ),
-                ),
-                child: Text(
-                  'Spremi',
-                  style: GoogleFonts.montserrat(
-                    textStyle: const TextStyle(
-                      color: Colors.white,
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Row(
+                children: [
+                  Expanded(
+                    child: InkWell(
+                      onTap: () {
+                        _selectDate(context);
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: primaryColor),
+                        ),
+                        child: TextFormField(
+                          style: const TextStyle(fontSize: 20),
+                          textAlign: TextAlign.center,
+                          enabled: false,
+                          keyboardType: TextInputType.text,
+                          controller: dateController,
+                          onSaved: (val) {},
+                          decoration: const InputDecoration(
+                            disabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide.none,
+                            ),
+                            contentPadding: EdgeInsets.only(top: 0),
+                          ),
+                        ),
+                      ),
                     ),
                   ),
-                  textAlign: TextAlign.center,
+                  SizedBox(
+                    width: size.width * 0.02,
+                  ),
+                  Expanded(
+                    child: InkWell(
+                      onTap: () {
+                        _selectTime(context);
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: primaryColor),
+                        ),
+                        child: TextFormField(
+                          style: const TextStyle(fontSize: 20),
+                          textAlign: TextAlign.center,
+                          onSaved: (val) {},
+                          enabled: false,
+                          keyboardType: TextInputType.text,
+                          controller: timeController,
+                          decoration: const InputDecoration(
+                            disabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide.none,
+                            ),
+                            contentPadding: EdgeInsets.all(5),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              width: size.width * 0.30,
+              child: TextButton(
+                onPressed: () => onSaveDateTime(),
+                child: Ink(
+                  width: double.infinity,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: size.width * 0.01,
+                    vertical: 10,
+                  ),
+                  decoration: const BoxDecoration(
+                    gradient: linearGradient,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(80.0),
+                    ),
+                  ),
+                  child: Text(
+                    'Spremi',
+                    style: GoogleFonts.montserrat(
+                      textStyle: const TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
               ),
             ),
-          ),
+          ],
         ),
       ],
     );

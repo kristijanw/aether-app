@@ -90,32 +90,23 @@ class PostCard extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    children: [
-                      Text(
-                        'Serviser:',
-                        style: GoogleFonts.montserrat(
-                          textStyle: const TextStyle(
-                            fontWeight: FontWeight.bold,
+                  Expanded(
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.person,
+                          size: size.width * 0.05,
+                        ),
+                        Text(
+                          '${post.user!.name}',
+                          style: GoogleFonts.montserrat(
+                            textStyle: TextStyle(
+                              fontSize: size.width * 0.03,
+                            ),
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        width: size.width * 0.01,
-                      ),
-                      Text(
-                        post.repairman != null
-                            ? '${post.repairman!.name}'
-                            : 'Serviser nije odabran',
-                        style: GoogleFonts.montserrat(
-                          textStyle: const TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 14,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                   Container(
                     padding: const EdgeInsets.all(5),

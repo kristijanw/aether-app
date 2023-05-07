@@ -1,11 +1,11 @@
+import 'dart:convert';
+
 import 'package:app/constant.dart';
 import 'package:app/models/api_response.dart';
 import 'package:app/models/post.dart';
-import 'package:app/screens/post_details_screen.dart';
 import 'package:app/services/posts_services.dart';
 import 'package:app/widgets/post_card.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -37,10 +37,12 @@ class _AdminScreenState extends State<AdminScreen> {
     ApiResponse response = await getPosts();
 
     if (response.error == null) {
-      final postList = response.data as List<dynamic>;
+      final data = jsonEncode(response.data);
+      final responseJson = jsonDecode(data)['posts'];
 
-      for (var element in postList) {
-        Post post = element;
+      for (var element in responseJson) {
+        final elementItem = element;
+        Post post = Post.fromJson(elementItem);
 
         if (post.arrival != null) {
           final dateFormat = DateFormat("yyyy-MM-dd");
@@ -83,17 +85,17 @@ class _AdminScreenState extends State<AdminScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    return Padding(
-      padding: const EdgeInsets.only(
-        top: 10,
-      ),
-      child: Column(
-        children: [
-          TableCalendar(
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 10,
+          ),
+          child: TableCalendar(
             locale: 'hr_HR',
             firstDay: DateTime.utc(2010, 10, 16),
             lastDay: DateTime.utc(2030, 3, 14),
-            focusedDay: DateTime.now(),
+            focusedDay: _focusedDay,
             calendarFormat: _calendarFormat,
             rowHeight: 40,
             headerStyle: const HeaderStyle(
@@ -141,22 +143,30 @@ class _AdminScreenState extends State<AdminScreen> {
             },
             eventLoader: _listOfDayServis,
           ),
-          const Divider(
-            height: 30,
-            color: Colors.black,
-          ),
-          SizedBox(
-            height: size.height * 0.35,
-            child: ListView(
-              children: _listOfDayServis(_selectedDate!).map((servis) {
-                Post post = servis;
+        ),
+        const Divider(
+          height: 30,
+          color: Colors.black,
+        ),
+        SizedBox(
+          height: size.height * 0.35,
+          child: ListView(
+            children: _listOfDayServis(_selectedDate!).map((servis) {
+              Post post = servis;
 
-                return PostCard(post: post);
-              }).toList(),
-            ),
+              return Padding(
+                padding: const EdgeInsets.only(
+                  top: 20,
+                  left: 20,
+                  right: 20,
+                  bottom: 0,
+                ),
+                child: PostCard(post: post),
+              );
+            }).toList(),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

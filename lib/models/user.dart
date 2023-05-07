@@ -2,47 +2,43 @@ class User {
   int? id;
   String? name;
   String? email;
-  Null? image;
   String? role;
+  String? nameCompany;
+  String? address;
+  String? contact;
   String? token;
-  Null? emailVerifiedAt;
-  String? createdAt;
-  String? updatedAt;
 
   User({
     this.id,
     this.name,
     this.email,
-    this.image,
     this.role,
+    this.nameCompany,
+    this.address,
+    this.contact,
     this.token,
-    this.emailVerifiedAt,
-    this.createdAt,
-    this.updatedAt,
   });
 
   User.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     email = json['email'];
-    image = json['image'];
     role = json['role'];
+    nameCompany = json['nameCompany'];
+    address = json['address'];
+    contact = json['contact'];
     token = json['token'];
-    emailVerifiedAt = json['email_verified_at'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
   }
 
   User.fromJsonLogin(Map<String, dynamic> json) {
     id = json['user']['id'];
     name = json['user']['name'];
     email = json['user']['email'];
-    image = json['user']['image'];
     role = json['user']['role'];
+    nameCompany = json['user']['nameCompany'];
+    address = json['user']['address'];
+    contact = json['user']['contact'];
     token = json['token'];
-    emailVerifiedAt = json['user']['email_verified_at'];
-    createdAt = json['user']['created_at'];
-    updatedAt = json['user']['updated_at'];
   }
 
   Map<String, dynamic> toJson() {
@@ -50,11 +46,10 @@ class User {
     data['id'] = id;
     data['name'] = name;
     data['email'] = email;
-    data['image'] = image;
     data['role'] = role;
-    data['email_verified_at'] = emailVerifiedAt;
-    data['created_at'] = createdAt;
-    data['updated_at'] = updatedAt;
+    data['nameCompany'] = nameCompany;
+    data['address'] = address;
+    data['contact'] = contact;
     return data;
   }
 }

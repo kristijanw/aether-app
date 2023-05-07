@@ -1,14 +1,15 @@
-import 'dart:io';
-
 import 'package:app/constant.dart';
 import 'package:app/models/api_response.dart';
 import 'package:app/models/user.dart';
 import 'package:app/screens/users/login.dart';
 import 'package:app/services/user_service.dart';
+import 'package:app/widgets/new_user.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class Profile extends StatefulWidget {
+  const Profile({super.key});
+
   @override
   _ProfileState createState() => _ProfileState();
 }
@@ -17,18 +18,10 @@ class _ProfileState extends State<Profile> {
   User? user;
   bool loading = true;
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  File? _imageFile;
-  final _picker = ImagePicker();
-  TextEditingController txtNameController = TextEditingController();
-
-  Future getImage() async {
-    final pickedFile = await _picker.getImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      setState(() {
-        _imageFile = File(pickedFile.path);
-      });
-    }
-  }
+  TextEditingController namelastnameController = TextEditingController();
+  TextEditingController nameCompanyController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
+  TextEditingController contactController = TextEditingController();
 
   // get user detail
   void getUser() async {
@@ -37,7 +30,10 @@ class _ProfileState extends State<Profile> {
       setState(() {
         user = response.data as User;
         loading = false;
-        txtNameController.text = user!.name ?? '';
+        namelastnameController.text = user!.name ?? '';
+        nameCompanyController.text = user!.nameCompany ?? '';
+        addressController.text = user!.address ?? '';
+        contactController.text = user!.contact ?? '';
       });
     } else if (response.error == unauthorized) {
       logout().then(
@@ -52,23 +48,33 @@ class _ProfileState extends State<Profile> {
       );
     } else {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('${response.error}')),
-      );
+      statusMessage('${response.error}', context, 'error');
     }
   }
 
   //update profile
   void updateProfile() async {
-    ApiResponse response =
-        await updateUser(txtNameController.text, getStringImage(_imageFile));
+    Map<String, String> userData = {
+      'name': namelastnameController.text,
+      'nameCompany': nameCompanyController.text,
+      'address': addressController.text,
+      'contact': contactController.text,
+    };
+
+    ApiResponse response = await updateUser(userData);
     setState(() {
       loading = false;
     });
+
     if (response.error == null) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('${response.data}')));
+      statusMessage('Uspješno ažurirano', context, 'success');
+      setState(() {
+        nameCompanyController.text = '';
+        addressController.text = '';
+        contactController.text = '';
+      });
+      getUser();
     } else if (response.error == unauthorized) {
       logout().then(
         (value) => {
@@ -82,9 +88,7 @@ class _ProfileState extends State<Profile> {
       );
     } else {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('${response.error}')),
-      );
+      statusMessage('${response.error}', context, 'error');
     }
   }
 
@@ -96,6 +100,8 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
     return loading
         ? const Center(
             child: CircularProgressIndicator(),
@@ -106,8 +112,17 @@ class _ProfileState extends State<Profile> {
               child: ListView(
                 children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      Text(
+                        'Moj profil',
+                        style: GoogleFonts.montserrat(
+                          textStyle: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
                       IconButton(
                         icon: const Icon(
                           Icons.exit_to_app,
@@ -128,32 +143,71 @@ class _ProfileState extends State<Profile> {
                       ),
                     ],
                   ),
-                  const SizedBox(
-                    height: 20,
+                  SizedBox(
+                    height: size.height * 0.02,
                   ),
                   Form(
                     key: formKey,
-                    child: TextFormField(
-                      decoration: kInputDecoration('Name'),
-                      controller: txtNameController,
-                      validator: (val) => val!.isEmpty ? 'Invalid Name' : null,
+                    child: Column(
+                      children: [
+                        TextFormField(
+                          decoration: kInputDecoration('Ime i prezime'),
+                          controller: namelastnameController,
+                          validator: (val) => val!.isEmpty
+                              ? 'Ovo polje ne smije biti prazno'
+                              : null,
+                        ),
+                        SizedBox(
+                          height: size.height * 0.02,
+                        ),
+                        TextFormField(
+                          decoration: kInputDecoration('Ime tvrtke'),
+                          controller: nameCompanyController,
+                        ),
+                        SizedBox(
+                          height: size.height * 0.02,
+                        ),
+                        TextFormField(
+                          decoration: kInputDecoration('Adresa'),
+                          controller: addressController,
+                        ),
+                        SizedBox(
+                          height: size.height * 0.02,
+                        ),
+                        TextFormField(
+                          decoration: kInputDecoration('Kontakt'),
+                          controller: contactController,
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(
-                    height: 20,
+                  SizedBox(
+                    height: size.height * 0.01,
                   ),
-                  Text('${user!.role}'),
-                  kTextButton(
-                    'Update',
-                    () {
-                      if (formKey.currentState!.validate()) {
-                        setState(() {
-                          loading = true;
-                        });
-                        updateProfile();
-                      }
-                    },
-                  )
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      kTextButton(
+                        'Ažuriraj',
+                        () {
+                          if (formKey.currentState!.validate()) {
+                            setState(() {
+                              loading = true;
+                            });
+                            updateProfile();
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: size.height * 0.03,
+                  ),
+                  if (user!.role == 'admin') ...{
+                    NewUser(
+                      roleName: user!.role.toString(),
+                    ),
+                  },
                 ],
               ),
             ),

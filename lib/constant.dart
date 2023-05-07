@@ -5,15 +5,20 @@ import 'package:google_fonts/google_fonts.dart';
 const baseURL = 'http://192.168.1.7:8000/api';
 const loginURL = '$baseURL/login';
 const registerURL = '$baseURL/register';
+const registerNewURL = '$baseURL/register-new';
 const logoutURL = '$baseURL/logout';
 const userURL = '$baseURL/user';
 const postsURL = '$baseURL/posts';
 const myPostsUrl = '$baseURL/my-posts';
 const myPostsStatus = '$baseURL/posts/status';
+const updateStatusUrl = '$baseURL/post-update-status';
 const setDateAndTime = '$baseURL/post-update-datetime';
 const getStatusPostUrl = '$baseURL/post-get-status';
 const getRepairMans = '$baseURL/get-repairmans';
 const setRepairMan = '$baseURL/assign-user-post';
+const getPostLogsURL = '$baseURL/post-logs';
+const createPostLogsURL = '$baseURL/create-post-log';
+const deletePostLogsURL = '$baseURL/post-log';
 
 const primaryColor = Color.fromRGBO(196, 0, 117, 1);
 
@@ -43,7 +48,7 @@ ScaffoldFeatureController<SnackBar, SnackBarClosedReason> statusMessage(
       backgroundColor: status == 'success' ? Colors.green : Colors.red,
       padding: const EdgeInsets.all(20),
       content: Text(
-        'Uspješno ažurirano',
+        message,
         style: GoogleFonts.montserrat(
           textStyle: const TextStyle(
             color: Colors.white,
@@ -144,7 +149,7 @@ TextButton kTextButton(String label, Function onPressed) {
   return TextButton(
     onPressed: () => onPressed(),
     child: Ink(
-      padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+      padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
       decoration: const BoxDecoration(
         gradient: linearGradient,
         borderRadius: BorderRadius.all(Radius.circular(80.0)),

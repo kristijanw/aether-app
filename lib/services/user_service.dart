@@ -5,8 +5,8 @@ import 'dart:io';
 
 import 'package:app/constant.dart';
 import 'package:app/models/api_response.dart';
-import 'package:app/models/repairman.dart';
 import 'package:app/models/user.dart';
+import 'package:app/services/api_services.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -72,6 +72,14 @@ Future<ApiResponse> register(Map dataPost) async {
   return apiResponse;
 }
 
+// registerNewUser
+Future<ApiResponse> registerNewUser(Map dataPost) async {
+  final apiResponse =
+      await apiCallPost(dataPost, registerNewURL, 'registerNewUser');
+
+  return apiResponse;
+}
+
 Future<ApiResponse> getRepairMan() async {
   ApiResponse apiResponse = ApiResponse();
   try {
@@ -97,7 +105,6 @@ Future<ApiResponse> getRepairMan() async {
     }
   } catch (e) {
     log('getRepairMan');
-    print(e);
     apiResponse.error = serverError;
   }
 
@@ -133,21 +140,16 @@ Future<ApiResponse> getUserDetail() async {
 }
 
 // Update user
-Future<ApiResponse> updateUser(String name, String? image) async {
+Future<ApiResponse> updateUser(Map userData) async {
   ApiResponse apiResponse = ApiResponse();
+
   try {
     String token = await getToken();
-    final response = await http.put(Uri.parse(userURL),
-        headers: {
-          'Accept': 'application/json',
-          'Authorization': 'Bearer $token'
-        },
-        body: image == null
-            ? {
-                'name': name,
-              }
-            : {'name': name, 'image': image});
-    // user can update his/her name or name and image
+    final response = await http.put(
+      Uri.parse(userURL),
+      headers: {'Accept': 'application/json', 'Authorization': 'Bearer $token'},
+      body: userData,
+    );
 
     switch (response.statusCode) {
       case 200:
@@ -157,7 +159,6 @@ Future<ApiResponse> updateUser(String name, String? image) async {
         apiResponse.error = unauthorized;
         break;
       default:
-        print(response.body);
         apiResponse.error = somethingWentWrong;
         break;
     }

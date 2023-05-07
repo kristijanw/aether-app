@@ -149,20 +149,16 @@ class _MyHomeState extends State<MyHome> {
         : SafeArea(
             child: SizedBox(
               height: MediaQuery.of(context).size.height,
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  left: 20,
-                  right: 20,
-                  bottom: 0,
-                ),
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Row(
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Row(
                         children: [
                           Expanded(
                             child: Text(
@@ -204,19 +200,19 @@ class _MyHomeState extends State<MyHome> {
                           }
                         ],
                       ),
-                      const SizedBox(
-                        height: 20,
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    if (user!.role == 'korisnik') ...{
+                      DoctorScreen(),
+                    },
+                    if (user!.role != 'korisnik') ...{
+                      AdminScreen(
+                        setDate: updateSelectedDate,
                       ),
-                      if (user!.role == 'korisnik') ...{
-                        DoctorScreen(),
-                      },
-                      if (user!.role != 'korisnik') ...{
-                        AdminScreen(
-                          setDate: updateSelectedDate,
-                        ),
-                      }
-                    ],
-                  ),
+                    }
+                  ],
                 ),
               ),
             ),

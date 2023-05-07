@@ -9,10 +9,10 @@ import 'package:app/services/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+// ignore: must_be_immutable
 class SetRepairMan extends StatefulWidget {
-  SetRepairMan({super.key, required this.postid, required this.post});
+  SetRepairMan({super.key, required this.post});
 
-  String postid;
   Post post;
 
   @override
@@ -27,7 +27,7 @@ class _SetRepairManState extends State<SetRepairMan> {
 
   void onSaveRepairman() async {
     Map<String, String> createDataPost = {
-      'postid': widget.postid,
+      'postid': widget.post.id.toString(),
       'user_servis_id': serviserIDValue.toString(),
     };
 
@@ -71,10 +71,17 @@ class _SetRepairManState extends State<SetRepairMan> {
       });
     }
 
-    setState(() {
-      serviserValue = listServiser.first['name'];
-      serviserIDValue = listServiser.first['id'];
-    });
+    if (widget.post.repairman != null) {
+      setState(() {
+        serviserValue = widget.post.repairman!.name.toString();
+        serviserIDValue = widget.post.repairman!.id!;
+      });
+    } else {
+      setState(() {
+        serviserValue = listServiser.first['name'];
+        serviserIDValue = listServiser.first['id'];
+      });
+    }
   }
 
   @override
@@ -87,69 +94,81 @@ class _SetRepairManState extends State<SetRepairMan> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    return Padding(
-      padding: const EdgeInsets.only(
-        top: 10,
-      ),
-      child: Column(
-        children: [
-          if (listServiser.isNotEmpty) ...{
-            Container(
-              width: double.infinity,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: primaryColor),
-              ),
-              child: DropdownButtonFormField(
-                value: serviserValue,
-                hint: const Text(
-                  'odaberi servisera',
-                ),
-                isExpanded: true,
-                onChanged: (value) {
-                  setState(() {
-                    serviserValue = value.toString();
-                  });
-
-                  for (var serviser in listServiser) {
-                    if (serviserValue == serviser['name']) {
-                      setState(() {
-                        serviserIDValue = serviser['id'];
-                      });
-                    }
-                  }
-                },
-                onSaved: (value) {
-                  setState(() {
-                    serviserValue = value.toString();
-                  });
-
-                  for (var serviser in listServiser) {
-                    if (serviserValue == serviser['name']) {
-                      setState(() {
-                        serviserIDValue = serviser['id'];
-                      });
-                    }
-                  }
-                },
-                items: listServiser.map((serviser) {
-                  return DropdownMenuItem(
-                    value: serviser['name'],
-                    child: Text(
-                      serviser['name'],
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Postavi servisera',
+          style: GoogleFonts.montserrat(
+            textStyle: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (listServiser.isNotEmpty) ...{
+              Expanded(
+                child: Container(
+                  width: double.infinity,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: primaryColor),
+                  ),
+                  child: DropdownButtonFormField(
+                    value: serviserValue,
+                    hint: const Text(
+                      'odaberi servisera',
                     ),
-                  );
-                }).toList(),
+                    decoration: const InputDecoration(
+                      contentPadding: EdgeInsets.all(
+                        10,
+                      ),
+                      focusedBorder: InputBorder.none,
+                    ),
+                    isExpanded: true,
+                    onChanged: (value) {
+                      setState(() {
+                        serviserValue = value.toString();
+                      });
+
+                      for (var serviser in listServiser) {
+                        if (serviserValue == serviser['name']) {
+                          setState(() {
+                            serviserIDValue = serviser['id'];
+                          });
+                        }
+                      }
+                    },
+                    onSaved: (value) {
+                      setState(() {
+                        serviserValue = value.toString();
+                      });
+
+                      for (var serviser in listServiser) {
+                        if (serviserValue == serviser['name']) {
+                          setState(() {
+                            serviserIDValue = serviser['id'];
+                          });
+                        }
+                      }
+                    },
+                    items: listServiser.map((serviser) {
+                      return DropdownMenuItem(
+                        value: serviser['name'],
+                        child: Text(
+                          serviser['name'],
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
               ),
-            ),
-            SizedBox(
-              height: size.height * 0.02,
-            ),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: SizedBox(
+              SizedBox(
                 width: size.width * 0.30,
                 child: TextButton(
                   onPressed: () => onSaveRepairman(),
@@ -177,10 +196,10 @@ class _SetRepairManState extends State<SetRepairMan> {
                   ),
                 ),
               ),
-            ),
-          },
-        ],
-      ),
+            },
+          ],
+        ),
+      ],
     );
     ;
   }
