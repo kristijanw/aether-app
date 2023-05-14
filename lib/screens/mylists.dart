@@ -24,6 +24,7 @@ class _MyListState extends State<MyList> {
   bool _loading = true;
   String sortByStatus = '';
   String sortByPriority = '';
+  String filterText = '';
 
   // get all posts
   Future<void> retrievePosts() async {
@@ -117,6 +118,19 @@ class _MyListState extends State<MyList> {
                         ],
                       ),
                       const SizedBox(
+                        height: 10,
+                      ),
+                      TextFormField(
+                        onChanged: (value) {
+                          setState(() {
+                            filterText = value;
+                          });
+                        },
+                        decoration: kInputDecoration(
+                          'Filter po nazivu ili korisniku',
+                        ),
+                      ),
+                      const SizedBox(
                         height: 20,
                       ),
                       Column(
@@ -125,26 +139,49 @@ class _MyListState extends State<MyList> {
 
                           if (sortByStatus != '' && sortByPriority != '') {
                             if (post.status!.statusName == sortByStatus &&
-                                post.priority.toString() == sortByPriority) {
+                                post.priority.toString() == sortByPriority &&
+                                (post.title!
+                                        .toLowerCase()
+                                        .contains(filterText.toLowerCase()) ||
+                                    post.user!.name!
+                                        .toLowerCase()
+                                        .contains(filterText.toLowerCase()))) {
                               return true;
                             } else {
                               return false;
                             }
                           } else if (sortByStatus != '') {
-                            if (post.status!.statusName == sortByStatus) {
+                            if (post.status!.statusName == sortByStatus &&
+                                (post.title!
+                                        .toLowerCase()
+                                        .contains(filterText.toLowerCase()) ||
+                                    post.user!.name!
+                                        .toLowerCase()
+                                        .contains(filterText.toLowerCase()))) {
                               return true;
                             } else {
                               return false;
                             }
                           } else if (sortByPriority != '') {
-                            if (post.priority.toString() == sortByPriority) {
+                            if (post.priority.toString() == sortByPriority &&
+                                (post.title!
+                                        .toLowerCase()
+                                        .contains(filterText.toLowerCase()) ||
+                                    post.user!.name!
+                                        .toLowerCase()
+                                        .contains(filterText.toLowerCase()))) {
                               return true;
                             } else {
                               return false;
                             }
+                          } else {
+                            return (post.title!
+                                    .toLowerCase()
+                                    .contains(filterText.toLowerCase()) ||
+                                post.user!.name!
+                                    .toLowerCase()
+                                    .contains(filterText.toLowerCase()));
                           }
-
-                          return true;
                         }).map((item) {
                           Post post = Post.fromJson(item);
 

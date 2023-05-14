@@ -148,22 +148,19 @@ class _AdminScreenState extends State<AdminScreen> {
           height: 30,
           color: Colors.black,
         ),
-        SizedBox(
-          height: size.height * 0.35,
-          child: ListView(
-            children: _listOfDayServis(_selectedDate!).map((servis) {
-              Post post = servis;
-
-              return Padding(
-                padding: const EdgeInsets.only(
-                  top: 20,
-                  left: 20,
-                  right: 20,
-                  bottom: 0,
-                ),
-                child: PostCard(post: post),
-              );
-            }).toList(),
+        SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Column(
+            children: [
+              ..._listOfDayServis(_selectedDate!).map((value) {
+                Post post = value;
+                return Container(
+                  padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
+                  width: size.width * 0.95,
+                  child: PostCard(post: post),
+                );
+              })
+            ],
           ),
         ),
       ],

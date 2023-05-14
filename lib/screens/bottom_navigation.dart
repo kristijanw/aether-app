@@ -10,6 +10,7 @@ class BottomNavigation extends StatefulWidget {
   const BottomNavigation({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _BottomNavigationState createState() => _BottomNavigationState();
 }
 
@@ -34,7 +35,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
   final screens = [
     const MyHome(),
     const MyList(),
-    Profile(),
+    const Profile(),
   ];
 
   @override
@@ -77,7 +78,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
           items: const [
             BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
             BottomNavigationBarItem(icon: Icon(Icons.list), label: 'MyPost'),
-            BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile')
+            BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
           ],
           currentIndex: currentIndex,
           onTap: (val) {

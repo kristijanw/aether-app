@@ -2,6 +2,7 @@ import 'package:app/constant.dart';
 import 'package:app/models/api_response.dart';
 import 'package:app/models/post.dart';
 import 'package:app/screens/users/login.dart';
+import 'package:app/services/notification.dart';
 import 'package:app/services/posts_services.dart';
 import 'package:app/services/user_service.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +27,26 @@ class _ChangeStatusState extends State<ChangeStatus> {
   ];
   late String priorityValue;
 
+  void pushNotificationStatus() async {
+    Map<String, String> createDataPost = {
+      'userId': widget.post.user!.id.toString(),
+      'title': 'Ažuriranje servisa',
+      'body': 'Ažuriran status servisa.',
+    };
+
+    ApiResponse response = await pushNotificationUpdatePost(createDataPost);
+
+    if (response.error == null) {
+      // ignore: avoid_print
+      print('Notifikacija uspješno poslana.');
+    } else {
+      // ignore: avoid_print
+      print(response.error);
+      // ignore: avoid_print
+      print('greška');
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -48,6 +69,7 @@ class _ChangeStatusState extends State<ChangeStatus> {
     if (response.error == null) {
       if (!mounted) return;
       statusMessage('Uspješno ažurirano', context, 'success');
+      pushNotificationStatus();
     } else if (response.error == unauthorized) {
       logout().then(
         (value) => {

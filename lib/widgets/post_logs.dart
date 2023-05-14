@@ -5,6 +5,7 @@ import 'package:app/models/api_response.dart';
 import 'package:app/models/post.dart';
 import 'package:app/models/post_log.dart';
 import 'package:app/screens/users/login.dart';
+import 'package:app/services/notification.dart';
 import 'package:app/services/posts_services.dart';
 import 'package:app/services/user_service.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +26,26 @@ class _PostLogsState extends State<PostLogs> {
   List postLogs = [];
   TextEditingController titleController = TextEditingController();
   TextEditingController bodyController = TextEditingController();
+
+  void pushNotificationLogs() async {
+    Map<String, String> createDataPost = {
+      'userId': widget.post.user!.id.toString(),
+      'title': 'Ažuriranje servisa',
+      'body': 'Kreiran novi zapis.',
+    };
+
+    ApiResponse response = await pushNotificationUpdatePost(createDataPost);
+
+    if (response.error == null) {
+      // ignore: avoid_print
+      print('Notifikacija uspješno poslana.');
+    } else {
+      // ignore: avoid_print
+      print(response.error);
+      // ignore: avoid_print
+      print('greška');
+    }
+  }
 
   loadAllPostLogs() async {
     ApiResponse response = await getAllPostLogs(widget.post.id.toString());
@@ -58,6 +79,7 @@ class _PostLogsState extends State<PostLogs> {
         bodyController.text = '';
       });
       loadAllPostLogs();
+      pushNotificationLogs();
     } else if (response.error == unauthorized) {
       logout().then(
         (value) => {

@@ -5,12 +5,14 @@ import 'package:app/constant.dart';
 import 'package:app/models/api_response.dart';
 import 'package:app/screens/bottom_navigation.dart';
 import 'package:app/screens/users/login.dart';
+import 'package:app/services/notification.dart';
 import 'package:app/services/posts_services.dart';
 import 'package:app/services/user_service.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+// ignore: must_be_immutable
 class PostFormAdmin extends StatefulWidget {
   PostFormAdmin({super.key, this.selectedDate, required this.dialogContext});
 
@@ -86,15 +88,46 @@ class _PostFormAdminState extends State<PostFormAdmin> {
     }
   }
 
-  void _checkPost() async {
-    Navigator.pop(widget.dialogContext);
+  void pushNotificationCreatePost() async {
+    Map<String, String> createDataPost = {
+      'title': 'Novi servis',
+      'body': 'Novi servis je kreiran',
+    };
 
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(
-        builder: (context) => const BottomNavigation(),
-      ),
-      (route) => false,
-    );
+    ApiResponse response = await pushNotificationsNewPost(createDataPost);
+
+    if (response.error == null) {
+      // ignore: avoid_print
+      print('Notifikacija uspješno poslana.');
+
+      if (!mounted) return;
+      Navigator.pop(widget.dialogContext);
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (context) => const BottomNavigation(),
+        ),
+        (route) => false,
+      );
+    } else if (response.error == unauthorized) {
+      logout().then(
+        (value) => {
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+              builder: (context) => const Login(),
+            ),
+            (route) => false,
+          )
+        },
+      );
+    } else {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('${response.error}')),
+      );
+      setState(() {
+        _loading = !_loading;
+      });
+    }
   }
 
   void _createPost() async {
@@ -115,7 +148,7 @@ class _PostFormAdminState extends State<PostFormAdmin> {
     ApiResponse response = await createPost(createDataPost);
 
     if (response.error == null) {
-      _checkPost();
+      pushNotificationCreatePost();
     } else if (response.error == unauthorized) {
       logout().then(
         (value) => {
@@ -167,8 +200,6 @@ class _PostFormAdminState extends State<PostFormAdmin> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-
     return Padding(
       padding: const EdgeInsets.only(
         top: 20,

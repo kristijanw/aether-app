@@ -76,7 +76,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
     Size size = MediaQuery.of(context).size;
 
     return Padding(
-      padding: const EdgeInsets.all(10.0),
+      padding: const EdgeInsets.symmetric(horizontal: 15),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -105,28 +105,19 @@ class _DoctorScreenState extends State<DoctorScreen> {
               height: 20,
             ),
           } else ...{
-            SizedBox(
-              width: double.infinity,
-              height: size.height / 4.5,
-              child: ListView.separated(
-                separatorBuilder: (context, index) => SizedBox(
-                  width: size.width * 0.05,
-                ),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 15,
-                ),
-                itemCount:
-                    _postListAktivno.length < 2 ? _postListAktivno.length : 2,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (BuildContext context, int index) {
-                  Post post = Post.fromJson(_postListAktivno[index]);
-
-                  return SizedBox(
-                    width: size.width * 0.70,
-                    child: PostCard(post: post),
-                  );
-                },
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  ..._postListAktivno.map((value) {
+                    Post post = Post.fromJson(value);
+                    return Container(
+                      padding: const EdgeInsets.all(10),
+                      width: size.width * 0.70,
+                      child: PostCard(post: post),
+                    );
+                  })
+                ],
               ),
             ),
             const SizedBox(
@@ -158,28 +149,19 @@ class _DoctorScreenState extends State<DoctorScreen> {
               height: 20,
             ),
           } else ...{
-            SizedBox(
-              width: double.infinity,
-              height: size.height / 4.5,
-              child: ListView.separated(
-                separatorBuilder: (context, index) => SizedBox(
-                  width: size.width * 0.05,
-                ),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 15,
-                ),
-                itemCount:
-                    _postListCekanje.length < 2 ? _postListCekanje.length : 2,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (BuildContext context, int index) {
-                  Post post = Post.fromJson(_postListCekanje[index]);
-
-                  return SizedBox(
-                    width: size.width * 0.70,
-                    child: PostCard(post: post),
-                  );
-                },
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  ..._postListCekanje.map((value) {
+                    Post post = Post.fromJson(value);
+                    return Container(
+                      padding: const EdgeInsets.all(10),
+                      width: size.width * 0.70,
+                      child: PostCard(post: post),
+                    );
+                  })
+                ],
               ),
             ),
             const SizedBox(
@@ -208,28 +190,19 @@ class _DoctorScreenState extends State<DoctorScreen> {
               ),
             ),
           } else ...{
-            SizedBox(
-              width: double.infinity,
-              height: size.height / 4.5,
-              child: ListView.separated(
-                separatorBuilder: (context, index) => SizedBox(
-                  width: size.width * 0.05,
-                ),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 15,
-                ),
-                itemCount:
-                    _postListGotovo.length < 2 ? _postListGotovo.length : 2,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (BuildContext context, int index) {
-                  Post post = Post.fromJson(_postListGotovo[index]);
-
-                  return SizedBox(
-                    width: size.width * 0.70,
-                    child: PostCard(post: post),
-                  );
-                },
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  ..._postListGotovo.map((value) {
+                    Post post = Post.fromJson(value);
+                    return Container(
+                      padding: const EdgeInsets.all(10),
+                      width: size.width * 0.70,
+                      child: PostCard(post: post),
+                    );
+                  })
+                ],
               ),
             ),
             const SizedBox(

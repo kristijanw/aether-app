@@ -4,6 +4,7 @@ import 'package:app/constant.dart';
 import 'package:app/models/api_response.dart';
 import 'package:app/screens/bottom_navigation.dart';
 import 'package:app/screens/users/login.dart';
+import 'package:app/services/notification.dart';
 import 'package:app/services/posts_services.dart';
 import 'package:app/services/user_service.dart';
 import 'package:app/widgets/widget_title.dart';
@@ -46,6 +47,46 @@ class _PostFormState extends State<PostForm> {
     }
   }
 
+  void pushNotificationCreatePost() async {
+    Map<String, String> createDataPost = {
+      'title': 'Novi servis',
+      'body': 'Novi servis je kreiran',
+    };
+
+    ApiResponse response = await pushNotificationsNewPost(createDataPost);
+
+    if (response.error == null) {
+      // ignore: avoid_print
+      print('Notifikacija uspješno poslana.');
+      if (!mounted) return;
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (context) => const BottomNavigation(),
+        ),
+        (route) => false,
+      );
+    } else if (response.error == unauthorized) {
+      logout().then(
+        (value) => {
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+              builder: (context) => const Login(),
+            ),
+            (route) => false,
+          )
+        },
+      );
+    } else {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('${response.error}')),
+      );
+      setState(() {
+        _loading = !_loading;
+      });
+    }
+  }
+
   void _createPost() async {
     String? image = _imageFile == null ? null : getStringImage(_imageFile);
 
@@ -60,12 +101,7 @@ class _PostFormState extends State<PostForm> {
     ApiResponse response = await createPost(createDataPost);
 
     if (response.error == null) {
-      Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(
-          builder: (context) => BottomNavigation(),
-        ),
-        (route) => false,
-      );
+      pushNotificationCreatePost();
     } else if (response.error == unauthorized) {
       logout().then(
         (value) => {

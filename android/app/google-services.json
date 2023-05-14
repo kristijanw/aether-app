@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "946008426809",
+    "project_id": "aethernotification",
+    "storage_bucket": "aethernotification.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:946008426809:android:d1566018e7ccfb418980e8",
+        "android_client_info": {
+          "package_name": "com.example.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "946008426809-de4o5rfudkhushnpcbv19fgrav2ncc1s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZsyQEKPc3mepdLXzaFmEhJ2evmo7TyqA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "946008426809-de4o5rfudkhushnpcbv19fgrav2ncc1s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -7,6 +7,7 @@ class User {
   String? address;
   String? contact;
   String? token;
+  String? fcmToken;
 
   User({
     this.id,
@@ -17,6 +18,7 @@ class User {
     this.address,
     this.contact,
     this.token,
+    this.fcmToken,
   });
 
   User.fromJson(Map<String, dynamic> json) {
@@ -28,6 +30,7 @@ class User {
     address = json['address'];
     contact = json['contact'];
     token = json['token'];
+    fcmToken = json['fcm_token'];
   }
 
   User.fromJsonLogin(Map<String, dynamic> json) {
@@ -38,6 +41,7 @@ class User {
     nameCompany = json['user']['nameCompany'];
     address = json['user']['address'];
     contact = json['user']['contact'];
+    fcmToken = json['user']['fcm_token'];
     token = json['token'];
   }
 

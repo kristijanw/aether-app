@@ -19,6 +19,9 @@ const setRepairMan = '$baseURL/assign-user-post';
 const getPostLogsURL = '$baseURL/post-logs';
 const createPostLogsURL = '$baseURL/create-post-log';
 const deletePostLogsURL = '$baseURL/post-log';
+const saveTokenUrl = '$baseURL/update-token';
+const sendNotificationAdminUrl = '$baseURL/send-notification-all';
+const sendNotificationUrl = '$baseURL/send-notification';
 
 const primaryColor = Color.fromRGBO(196, 0, 117, 1);
 
@@ -186,4 +189,11 @@ Row kLoginRegisterHint(String text, String label, Function onTap) {
       )
     ],
   );
+}
+
+class Constants {
+  static const String baseUrl = 'https://fcm.googleapis.com/fcm/send';
+  static const String keyServer =
+      'AAAA3EJ_CTk:APA91bFcjGtY3xlOzFFo9pJR9lVJT3wreyYQ9BDGNZmzurTF1dKipG45azY85tamKD6jAvsopTrrQ1h1fZY1nlYd5kF8dapdNYl_sAfK2yxpu8qe3PUHV_65XpFV_j6sxzOc9QXWBk3u';
+  static const String senderID = '946008426809';
 }

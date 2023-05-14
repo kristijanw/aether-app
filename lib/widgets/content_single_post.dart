@@ -105,7 +105,7 @@ class _ContentSinglePostState extends State<ContentSinglePost> {
         SizedBox(
           height: size.height * 0.015,
         ),
-        Row(
+        Wrap(
           children: [
             Text(
               'Datum početka popravka:',
