@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-const baseURL = 'http://192.168.1.7:8000/api';
+const baseURL = 'https://staging.aether.hr/backend/api';
 const loginURL = '$baseURL/login';
 const registerURL = '$baseURL/register';
 const registerNewURL = '$baseURL/register-new';

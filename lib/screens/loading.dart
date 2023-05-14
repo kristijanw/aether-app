@@ -27,6 +27,8 @@ class _LoadingState extends State<Loading> {
       'token': tokenData,
     };
 
+    log('Token: $tokenData');
+
     ApiResponse response = await saveToken(
       createDataPost,
       user!.id.toString(),
