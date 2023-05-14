@@ -208,6 +208,9 @@ class _ProfileState extends State<Profile> {
                       roleName: user!.role.toString(),
                     ),
                   },
+                  SizedBox(
+                    height: size.height * 0.04,
+                  ),
                 ],
               ),
             ),

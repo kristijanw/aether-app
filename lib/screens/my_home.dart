@@ -103,6 +103,38 @@ class _MyHomeState extends State<MyHome> {
     );
   }
 
+  void updateToken() async {
+    String tokenData = await token();
+
+    Map<String, String> createDataPost = {
+      'token': tokenData,
+    };
+
+    ApiResponse response = await saveToken(
+      createDataPost,
+      user!.id.toString(),
+    );
+
+    if (response.error == null) {
+    } else if (response.error == unauthorized) {
+      logout().then(
+        (value) => {
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+              builder: (context) => const Login(),
+            ),
+            (route) => false,
+          )
+        },
+      );
+    } else {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('${response.error}')),
+      );
+    }
+  }
+
   // get user detail
   void getUser() async {
     ApiResponse response = await getUserDetail();
@@ -112,6 +144,8 @@ class _MyHomeState extends State<MyHome> {
         user = response.data as User;
         _loading = _loading ? !_loading : _loading;
       });
+      // If user is logged
+      updateToken();
     } else if (response.error == unauthorized) {
       logout().then(
         (value) => {

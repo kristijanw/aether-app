@@ -172,6 +172,43 @@ Future<ApiResponse> updateUser(Map userData) async {
   return apiResponse;
 }
 
+// All users
+Future<ApiResponse> getAllUsers() async {
+  ApiResponse apiResponse = ApiResponse();
+
+  try {
+    String token = await getToken();
+    final response = await http.get(
+      Uri.parse(allUsersURL),
+      headers: {'Accept': 'application/json', 'Authorization': 'Bearer $token'},
+    );
+
+    switch (response.statusCode) {
+      case 200:
+        apiResponse.data = jsonDecode(response.body);
+        break;
+      case 401:
+        apiResponse.error = unauthorized;
+        break;
+      default:
+        apiResponse.error = somethingWentWrong;
+        break;
+    }
+  } catch (e) {
+    apiResponse.error = serverError;
+  }
+  return apiResponse;
+}
+
+// Delete user
+Future<ApiResponse> deleteUser(String userID) async {
+  final url = '$deleteUserURL/$userID';
+
+  final apiResponse = await apiCallDelete(url, 'deleteUser');
+
+  return apiResponse;
+}
+
 // get token
 Future<String> getToken() async {
   SharedPreferences pref = await SharedPreferences.getInstance();

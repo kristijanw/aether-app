@@ -1,4 +1,5 @@
 import 'package:app/constant.dart';
+import 'package:app/screens/list_users.dart';
 import 'package:app/screens/my_home.dart';
 import 'package:app/screens/mylists.dart';
 import 'package:app/screens/post_form.dart';
@@ -17,6 +18,16 @@ class BottomNavigation extends StatefulWidget {
 class _BottomNavigationState extends State<BottomNavigation> {
   int currentIndex = 0;
   String roleName = '';
+  List<BottomNavigationBarItem> listItems = [
+    BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+    BottomNavigationBarItem(icon: Icon(Icons.list), label: 'MyPost'),
+    BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+  ];
+  List<Widget> screens = [
+    const MyHome(),
+    const MyList(),
+    const Profile(),
+  ];
 
   void getRoleName() async {
     await getRole().then((value) {
@@ -24,6 +35,27 @@ class _BottomNavigationState extends State<BottomNavigation> {
         roleName = value;
       });
     });
+
+    if (roleName == 'admin') {
+      setState(() {
+        screens = [
+          const MyHome(),
+          const MyList(),
+          const Profile(),
+          const ListUsers(),
+        ];
+
+        listItems = [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.list), label: 'MyPost'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.list_alt),
+            label: 'ListUsers',
+          ),
+        ];
+      });
+    }
   }
 
   @override
@@ -31,12 +63,6 @@ class _BottomNavigationState extends State<BottomNavigation> {
     super.initState();
     getRoleName();
   }
-
-  final screens = [
-    const MyHome(),
-    const MyList(),
-    const Profile(),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -69,17 +95,15 @@ class _BottomNavigationState extends State<BottomNavigation> {
         clipBehavior: Clip.antiAlias,
         shape: const CircularNotchedRectangle(),
         child: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
           backgroundColor: Colors.transparent,
           fixedColor: primaryColor,
+          unselectedItemColor: Color.fromARGB(255, 87, 87, 87),
           elevation: 0,
           iconSize: 30,
           showSelectedLabels: false,
           showUnselectedLabels: false,
-          items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-            BottomNavigationBarItem(icon: Icon(Icons.list), label: 'MyPost'),
-            BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-          ],
+          items: listItems,
           currentIndex: currentIndex,
           onTap: (val) {
             setState(() {
