@@ -17,6 +17,7 @@ class PostForm extends StatefulWidget {
   });
 
   @override
+  // ignore: library_private_types_in_public_api
   _PostFormState createState() => _PostFormState();
 }
 
@@ -39,6 +40,7 @@ class _PostFormState extends State<PostForm> {
   String roleName = '';
 
   Future getImage() async {
+    // ignore: deprecated_member_use
     final pickedFile = await _picker.getImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       setState(() {
@@ -114,6 +116,7 @@ class _PostFormState extends State<PostForm> {
         },
       );
     } else {
+      if (!mounted) return;
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('${response.error}')));
       setState(() {

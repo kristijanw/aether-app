@@ -21,6 +21,7 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
+  // ignore: avoid_print
   print("Handling a background message: ${message.messageId}");
 }
 
@@ -37,6 +38,7 @@ Future<void> approvNotification() async {
     sound: true,
   );
 
+  // ignore: avoid_print
   print('User granted permission: ${settings.authorizationStatus}');
 }
 
@@ -52,12 +54,17 @@ void main() async {
   }
 
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    // ignore: avoid_print
     print('Got a message whilst in the foreground!');
+    // ignore: avoid_print
     print('Message data: ${message.data}');
+    // ignore: avoid_print
     print('Message title: ${message.notification!.title}');
+    // ignore: avoid_print
     print('Message body: ${message.notification!.body}');
 
     if (message.notification != null) {
+      // ignore: avoid_print
       print('Message also contained a notification: ${message.notification}');
 
       RemoteNotification? notification = message.notification;

@@ -8,8 +8,8 @@ import 'package:app/widgets/set_datetime.dart';
 import 'package:app/widgets/set_repairman.dart';
 import 'package:app/widgets/widget_title.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
+// ignore: must_be_immutable
 class PostView extends StatefulWidget {
   PostView({super.key, required this.post});
 

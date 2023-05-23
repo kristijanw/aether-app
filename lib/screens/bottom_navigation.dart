@@ -18,7 +18,7 @@ class BottomNavigation extends StatefulWidget {
 class _BottomNavigationState extends State<BottomNavigation> {
   int currentIndex = 0;
   String roleName = '';
-  List<BottomNavigationBarItem> listItems = [
+  List<BottomNavigationBarItem> listItems = const [
     BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
     BottomNavigationBarItem(icon: Icon(Icons.list), label: 'MyPost'),
     BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
@@ -45,7 +45,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
           const ListUsers(),
         ];
 
-        listItems = [
+        listItems = const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.list), label: 'MyPost'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
@@ -98,7 +98,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
           type: BottomNavigationBarType.fixed,
           backgroundColor: Colors.transparent,
           fixedColor: primaryColor,
-          unselectedItemColor: Color.fromARGB(255, 87, 87, 87),
+          unselectedItemColor: const Color.fromARGB(255, 87, 87, 87),
           elevation: 0,
           iconSize: 30,
           showSelectedLabels: false,

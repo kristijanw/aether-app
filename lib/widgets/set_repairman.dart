@@ -223,6 +223,5 @@ class _SetRepairManState extends State<SetRepairMan> {
         ),
       ],
     );
-    ;
   }
 }

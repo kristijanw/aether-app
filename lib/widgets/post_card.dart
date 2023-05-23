@@ -4,6 +4,7 @@ import 'package:app/screens/post_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+// ignore: must_be_immutable
 class PostCard extends StatelessWidget {
   PostCard({super.key, required this.post});
 

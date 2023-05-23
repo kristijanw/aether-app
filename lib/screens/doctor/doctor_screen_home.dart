@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class DoctorScreen extends StatefulWidget {
-  DoctorScreen({super.key});
+  const DoctorScreen({super.key});
 
   @override
   State<DoctorScreen> createState() => _DoctorScreenState();

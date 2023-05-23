@@ -5,8 +5,8 @@ import 'package:app/screens/users/login.dart';
 import 'package:app/services/user_service.dart';
 import 'package:app/widgets/widget_title.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
+// ignore: must_be_immutable
 class UserDetailsScreen extends StatefulWidget {
   UserDetailsScreen({super.key, required this.user});
 
@@ -92,7 +92,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:app/constant.dart';
 import 'package:app/models/api_response.dart';
 import 'package:app/models/user.dart';
@@ -242,7 +240,7 @@ class _MyHomeState extends State<MyHome> {
                       height: 20,
                     ),
                     if (user!.role == 'korisnik') ...{
-                      DoctorScreen(),
+                      const DoctorScreen(),
                     },
                     if (user!.role != 'korisnik') ...{
                       AdminScreen(

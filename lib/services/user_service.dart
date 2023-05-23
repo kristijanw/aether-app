@@ -21,7 +21,9 @@ Future<ApiResponse> login(String email, String password) async {
       body: {'email': email, 'password': password},
     );
 
+    // ignore: avoid_print
     print(response.statusCode);
+    // ignore: avoid_print
     print(loginURL);
 
     switch (response.statusCode) {
@@ -41,6 +43,7 @@ Future<ApiResponse> login(String email, String password) async {
     }
   } catch (e) {
     log('login');
+    // ignore: avoid_print
     print(e);
     apiResponse.error = serverError;
   }
@@ -156,6 +159,7 @@ Future<ApiResponse> updateUser(Map userData) async {
       body: userData,
     );
 
+    // ignore: avoid_print
     print(response.body);
 
     switch (response.statusCode) {

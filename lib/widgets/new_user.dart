@@ -4,6 +4,7 @@ import 'package:app/services/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+// ignore: must_be_immutable
 class NewUser extends StatefulWidget {
   NewUser({
     super.key,

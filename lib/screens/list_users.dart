@@ -91,7 +91,8 @@ class _ListUsersState extends State<ListUsers> {
             child: SafeArea(
               child: SingleChildScrollView(
                 child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 35, horizontal: 20),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 35, horizontal: 20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -148,13 +149,13 @@ class _ListUsersState extends State<ListUsers> {
                                         ),
                                       ),
                                       Container(
-                                        padding: EdgeInsets.symmetric(
+                                        padding: const EdgeInsets.symmetric(
                                           vertical: 5,
                                           horizontal: 10,
                                         ),
-                                        decoration: BoxDecoration(
+                                        decoration: const BoxDecoration(
                                           color: primaryColor,
-                                          borderRadius: const BorderRadius.all(
+                                          borderRadius: BorderRadius.all(
                                             Radius.circular(10.0),
                                           ),
                                         ),
@@ -278,7 +279,7 @@ class _ListUsersState extends State<ListUsers> {
         SizedBox(
           width: size.width * 0.50,
           child: Text(
-            value != null ? value : '',
+            value ?? '',
             style: GoogleFonts.montserrat(
               textStyle: TextStyle(
                 fontSize: size.height * 0.015,

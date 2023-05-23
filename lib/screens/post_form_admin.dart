@@ -80,6 +80,7 @@ class _PostFormAdminState extends State<PostFormAdmin> {
   }
 
   Future getImage() async {
+    // ignore: deprecated_member_use
     final pickedFile = await _picker.getImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       setState(() {
@@ -175,6 +176,22 @@ class _PostFormAdminState extends State<PostFormAdmin> {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
       initialTime: selectedTime,
+      builder: (context, child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            primaryColor: const Color(0xFF8CE7F1),
+            // ignore: deprecated_member_use
+            accentColor: const Color(0xFF8CE7F1),
+            colorScheme: const ColorScheme.light(
+              primary: Color.fromARGB(255, 187, 14, 95),
+            ),
+            buttonTheme: const ButtonThemeData(
+              textTheme: ButtonTextTheme.primary,
+            ),
+          ),
+          child: child!,
+        );
+      },
     );
     if (picked != null) {
       setState(() {

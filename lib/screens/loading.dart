@@ -1,12 +1,9 @@
-import 'dart:developer';
-
 import 'package:app/constant.dart';
 import 'package:app/models/api_response.dart';
 import 'package:app/models/user.dart';
 import 'package:app/screens/bottom_navigation.dart';
 import 'package:app/screens/splash_screen.dart';
 import 'package:app/screens/users/login.dart';
-import 'package:app/services/notification.dart';
 import 'package:app/services/user_service.dart';
 import 'package:flutter/material.dart';
 
@@ -14,6 +11,7 @@ class Loading extends StatefulWidget {
   const Loading({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _LoadingState createState() => _LoadingState();
 }
 
@@ -27,7 +25,7 @@ class _LoadingState extends State<Loading> {
       if (!mounted) return;
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
-          builder: (context) => SplashScreen(),
+          builder: (context) => const SplashScreen(),
         ),
         (route) => false,
       );
@@ -51,6 +49,7 @@ class _LoadingState extends State<Loading> {
           (route) => false,
         );
       } else {
+        if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text('${response.error}'),
         ));
