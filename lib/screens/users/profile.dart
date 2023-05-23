@@ -4,8 +4,8 @@ import 'package:app/models/user.dart';
 import 'package:app/screens/users/login.dart';
 import 'package:app/services/user_service.dart';
 import 'package:app/widgets/new_user.dart';
+import 'package:app/widgets/widget_title.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -55,6 +55,7 @@ class _ProfileState extends State<Profile> {
   //update profile
   void updateProfile() async {
     Map<String, String> userData = {
+      'id': user!.id.toString(),
       'name': namelastnameController.text,
       'nameCompany': nameCompanyController.text,
       'address': addressController.text,
@@ -69,11 +70,6 @@ class _ProfileState extends State<Profile> {
     if (response.error == null) {
       if (!mounted) return;
       statusMessage('Uspješno ažurirano', context, 'success');
-      setState(() {
-        nameCompanyController.text = '';
-        addressController.text = '';
-        contactController.text = '';
-      });
       getUser();
     } else if (response.error == unauthorized) {
       logout().then(
@@ -114,15 +110,7 @@ class _ProfileState extends State<Profile> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        'Moj profil',
-                        style: GoogleFonts.montserrat(
-                          textStyle: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
+                      WidgetTitle(title: 'Moj Profil'),
                       IconButton(
                         icon: const Icon(
                           Icons.exit_to_app,

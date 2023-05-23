@@ -7,6 +7,7 @@ import 'package:app/constant.dart';
 import 'package:app/models/api_response.dart';
 import 'package:app/models/user.dart';
 import 'package:app/services/api_services.dart';
+import 'package:app/services/notification.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -155,6 +156,8 @@ Future<ApiResponse> updateUser(Map userData) async {
       body: userData,
     );
 
+    print(response.body);
+
     switch (response.statusCode) {
       case 200:
         apiResponse.data = jsonDecode(response.body)['message'];
@@ -229,6 +232,10 @@ Future<int> getUserId() async {
 
 // logout
 Future<bool> logout() async {
+  String userid = '';
+  await getUserId().then((value) => userid = value.toString());
+  await removeToken(userid);
+
   SharedPreferences pref = await SharedPreferences.getInstance();
   return await pref.remove('token');
 }

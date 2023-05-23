@@ -76,6 +76,7 @@ class _MyListState extends State<MyList> {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       WidgetTitle(title: 'Popis servisa'),
                       const SizedBox(

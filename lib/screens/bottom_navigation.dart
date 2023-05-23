@@ -68,7 +68,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: screens[currentIndex],
-      floatingActionButton: roleName != 'admin'
+      floatingActionButton: (roleName == 'korisnik')
           ? SizedBox(
               width: 50,
               height: 50,
