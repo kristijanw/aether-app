@@ -193,9 +193,7 @@ class _ProfileState extends State<Profile> {
                     height: size.height * 0.03,
                   ),
                   if (user!.role == 'admin') ...{
-                    NewUser(
-                      roleName: user!.role.toString(),
-                    ),
+                    const NewUser(),
                   },
                   SizedBox(
                     height: size.height * 0.04,

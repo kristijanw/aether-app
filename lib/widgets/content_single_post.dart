@@ -255,7 +255,7 @@ class _ContentSinglePostState extends State<ContentSinglePost> {
             decoration: BoxDecoration(
               image: DecorationImage(
                 image: NetworkImage('${widget.post.image}'),
-                fit: BoxFit.cover,
+                fit: BoxFit.contain,
               ),
             ),
           ),

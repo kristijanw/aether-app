@@ -6,12 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 // ignore: must_be_immutable
 class NewUser extends StatefulWidget {
-  NewUser({
-    super.key,
-    required this.roleName,
-  });
-
-  String roleName;
+  const NewUser({super.key});
 
   @override
   State<NewUser> createState() => _NewUserState();
@@ -61,9 +56,7 @@ class _NewUserState extends State<NewUser> {
   void initState() {
     super.initState();
 
-    if (widget.roleName == 'admin') {
-      roleController.text = roleList.first;
-    }
+    roleController.text = roleList.first;
   }
 
   @override
