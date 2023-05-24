@@ -68,7 +68,7 @@ class PostCard extends StatelessWidget {
                   width: size.width * 0.10,
                 ),
                 Tooltip(
-                  message: post.priority,
+                  message: post.priority ?? '',
                   verticalOffset: -50,
                   triggerMode: TooltipTriggerMode.tap,
                   child: Container(
