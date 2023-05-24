@@ -28,13 +28,16 @@ class _PostFormAdminState extends State<PostFormAdmin> {
   final TextEditingController _txtControllerBody = TextEditingController();
   final TextEditingController _txtControllerTitle = TextEditingController();
   final TextEditingController timeController = TextEditingController();
+  final TextEditingController newDeviceController = TextEditingController();
   TimeOfDay selectedTime = const TimeOfDay(hour: 00, minute: 00);
   late String _hour, _minute, _time;
   bool _loading = false;
   File? _imageFile;
   final _picker = ImagePicker();
+  bool newDevice = false;
   List<String> list = <String>[
     'odaberi uređaj',
+    'dodaj novi',
     'Uređaj 1',
     'Uređaj 2',
     'Uređaj 3',
@@ -138,7 +141,9 @@ class _PostFormAdminState extends State<PostFormAdmin> {
       'title': _txtControllerTitle.text,
       'body': _txtControllerBody.text,
       'image': image ?? '',
-      'name_device': dropdownValue.toString(),
+      'name_device': newDevice != true
+          ? dropdownValue.toString()
+          : newDeviceController.text,
       'guarantee': isChecked == true ? 'ima' : 'nema',
       'arrival': widget.selectedDate.toString(),
       'time': timeController.text,
@@ -289,6 +294,16 @@ class _PostFormAdminState extends State<PostFormAdmin> {
                       ),
                     ),
                     onChanged: (value) {
+                      if (value.toString() == 'dodaj novi') {
+                        setState(() {
+                          newDevice = true;
+                        });
+                      } else {
+                        setState(() {
+                          newDevice = false;
+                        });
+                      }
+
                       setState(() {
                         dropdownValue = value.toString();
                       });
@@ -315,6 +330,25 @@ class _PostFormAdminState extends State<PostFormAdmin> {
                       );
                     }).toList(),
                   ),
+                  if (newDevice == true) ...{
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextFormField(
+                      controller: newDeviceController,
+                      validator: (val) =>
+                          val!.isEmpty ? 'Naziv je obavezan' : null,
+                      decoration: const InputDecoration(
+                        hintText: "Novi uređaj",
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            width: 1,
+                            color: Colors.black38,
+                          ),
+                        ),
+                      ),
+                    ),
+                  },
                   const SizedBox(
                     height: 10,
                   ),

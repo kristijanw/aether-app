@@ -25,9 +25,11 @@ class _PostFormState extends State<PostForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _txtControllerBody = TextEditingController();
   final TextEditingController _txtControllerTitle = TextEditingController();
+  final TextEditingController newDeviceController = TextEditingController();
   bool _loading = false;
   File? _imageFile;
   final _picker = ImagePicker();
+  bool newDevice = false;
   List<String> list = <String>[
     'odaberi uređaj',
     'Uređaj 1',
@@ -96,7 +98,9 @@ class _PostFormState extends State<PostForm> {
       'title': _txtControllerTitle.text,
       'body': _txtControllerBody.text,
       'image': image ?? '',
-      'name_device': dropdownValue.toString(),
+      'name_device': newDevice != true
+          ? dropdownValue.toString()
+          : newDeviceController.text,
       'guarantee': isChecked == true ? 'ima' : 'nema',
     };
 
@@ -219,6 +223,16 @@ class _PostFormState extends State<PostForm> {
                             ),
                           ),
                           onChanged: (value) {
+                            if (value.toString() == 'dodaj novi') {
+                              setState(() {
+                                newDevice = true;
+                              });
+                            } else {
+                              setState(() {
+                                newDevice = false;
+                              });
+                            }
+
                             setState(() {
                               dropdownValue = value.toString();
                             });
@@ -245,6 +259,25 @@ class _PostFormState extends State<PostForm> {
                             );
                           }).toList(),
                         ),
+                        if (newDevice == true) ...{
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          TextFormField(
+                            controller: newDeviceController,
+                            validator: (val) =>
+                                val!.isEmpty ? 'Naziv je obavezan' : null,
+                            decoration: const InputDecoration(
+                              hintText: "Novi uređaj",
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  width: 1,
+                                  color: Colors.black38,
+                                ),
+                              ),
+                            ),
+                          ),
+                        },
                         const SizedBox(
                           height: 10,
                         ),
