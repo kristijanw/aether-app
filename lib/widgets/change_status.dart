@@ -26,6 +26,7 @@ class _ChangeStatusState extends State<ChangeStatus> {
     'gotovo',
   ];
   late String priorityValue;
+  bool changedStatus = false;
 
   void pushNotificationStatus() async {
     Map<String, String> createDataPost = {
@@ -129,6 +130,7 @@ class _ChangeStatusState extends State<ChangeStatus> {
                   ),
                   onChanged: (value) {
                     setState(() {
+                      changedStatus = true;
                       priorityValue = value.toString();
                     });
                   },
@@ -186,6 +188,17 @@ class _ChangeStatusState extends State<ChangeStatus> {
             ),
           ],
         ),
+        if (changedStatus) ...{
+          Text(
+            'Obavezno spremiti izmjenu',
+            style: GoogleFonts.montserrat(
+              textStyle: const TextStyle(
+                color: Colors.red,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        },
       ],
     );
   }

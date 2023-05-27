@@ -25,6 +25,7 @@ class _SetRepairManState extends State<SetRepairMan> {
   List listServiser = [];
   late String serviserValue;
   late int serviserIDValue;
+  bool changedReapirman = false;
 
   void pushNotificationReapirman() async {
     Map<String, String> createDataPost = {
@@ -155,6 +156,7 @@ class _SetRepairManState extends State<SetRepairMan> {
                     isExpanded: true,
                     onChanged: (value) {
                       setState(() {
+                        changedReapirman = true;
                         serviserValue = value.toString();
                       });
 
@@ -221,6 +223,17 @@ class _SetRepairManState extends State<SetRepairMan> {
             },
           ],
         ),
+        if (changedReapirman) ...{
+          Text(
+            'Obavezno spremiti izmjenu',
+            style: GoogleFonts.montserrat(
+              textStyle: const TextStyle(
+                color: Colors.red,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        },
       ],
     );
   }

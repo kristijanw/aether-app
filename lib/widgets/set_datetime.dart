@@ -28,6 +28,8 @@ class _SetDateTimeState extends State<SetDateTime> {
   TimeOfDay selectedTime = const TimeOfDay(hour: 00, minute: 00);
   TextEditingController dateController = TextEditingController();
   TextEditingController timeController = TextEditingController();
+  bool changedDate = false;
+  bool changedTime = false;
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -56,6 +58,7 @@ class _SetDateTimeState extends State<SetDateTime> {
 
     if (picked != null) {
       setState(() {
+        changedDate = true;
         selectedDate = picked;
         dateController.text =
             DateFormat('dd.M.yyyy').format(selectedDate).toString();
@@ -86,6 +89,7 @@ class _SetDateTimeState extends State<SetDateTime> {
     );
     if (picked != null) {
       setState(() {
+        changedTime = true;
         selectedTime = picked;
         _hour = selectedTime.hour.toString();
         _minute = selectedTime.minute.toString();
@@ -284,6 +288,17 @@ class _SetDateTimeState extends State<SetDateTime> {
             ),
           ],
         ),
+        if (changedDate || changedTime) ...{
+          Text(
+            'Obavezno spremiti izmjenu',
+            style: GoogleFonts.montserrat(
+              textStyle: const TextStyle(
+                color: Colors.red,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        },
       ],
     );
   }

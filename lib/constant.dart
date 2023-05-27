@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 // https://staging.aether.hr/backend/api
-// http://192.168.1.5:8000/api
+// http://192.168.1.7:8000/api
 const baseURL = 'https://staging.aether.hr/backend/api';
 const loginURL = '$baseURL/login';
 const registerURL = '$baseURL/register';

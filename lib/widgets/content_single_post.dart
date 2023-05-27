@@ -1,5 +1,6 @@
 import 'package:app/constant.dart';
 import 'package:app/models/post.dart';
+import 'package:app/widgets/full_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -249,13 +250,25 @@ class _ContentSinglePostState extends State<ContentSinglePost> {
           const SizedBox(
             height: 5,
           ),
-          Container(
-            width: double.infinity,
-            height: 180,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: NetworkImage('${widget.post.image}'),
-                fit: BoxFit.contain,
+          InkWell(
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => FullImage(
+                    imageUrl: widget.post.image.toString(),
+                  ),
+                  maintainState: false,
+                ),
+              );
+            },
+            child: Container(
+              width: double.infinity,
+              height: 180,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: NetworkImage('${widget.post.image}'),
+                  fit: BoxFit.contain,
+                ),
               ),
             ),
           ),
