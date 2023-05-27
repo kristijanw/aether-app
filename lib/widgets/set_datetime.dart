@@ -42,8 +42,6 @@ class _SetDateTimeState extends State<SetDateTime> {
         return Theme(
           data: ThemeData.light().copyWith(
             primaryColor: const Color(0xFF8CE7F1),
-            // ignore: deprecated_member_use
-            accentColor: const Color(0xFF8CE7F1),
             colorScheme: const ColorScheme.light(
               primary: Color.fromARGB(255, 187, 14, 95),
             ),
@@ -74,8 +72,6 @@ class _SetDateTimeState extends State<SetDateTime> {
         return Theme(
           data: ThemeData.light().copyWith(
             primaryColor: const Color(0xFF8CE7F1),
-            // ignore: deprecated_member_use
-            accentColor: const Color(0xFF8CE7F1),
             colorScheme: const ColorScheme.light(
               primary: Color.fromARGB(255, 187, 14, 95),
             ),
