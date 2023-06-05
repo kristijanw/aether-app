@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:app/constant.dart';
 import 'package:app/firebase_options.dart';
 import 'package:app/screens/loading.dart';
@@ -21,25 +19,6 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
-  // ignore: avoid_print
-  print("Handling a background message: ${message.messageId}");
-}
-
-Future<void> approvNotification() async {
-  FirebaseMessaging messaging = FirebaseMessaging.instance;
-
-  NotificationSettings settings = await messaging.requestPermission(
-    alert: true,
-    announcement: false,
-    badge: true,
-    carPlay: false,
-    criticalAlert: false,
-    provisional: false,
-    sound: true,
-  );
-
-  // ignore: avoid_print
-  print('User granted permission: ${settings.authorizationStatus}');
 }
 
 void main() async {
@@ -49,44 +28,8 @@ void main() async {
   );
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
-  if (Platform.isIOS) {
-    approvNotification();
-  }
-
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    // ignore: avoid_print
-    print('Got a message whilst in the foreground!');
-    // ignore: avoid_print
-    print('Message data: ${message.data}');
-    // ignore: avoid_print
-    print('Message title: ${message.notification!.title}');
-    // ignore: avoid_print
-    print('Message body: ${message.notification!.body}');
-
-    if (message.notification != null) {
-      // ignore: avoid_print
-      print('Message also contained a notification: ${message.notification}');
-
-      RemoteNotification? notification = message.notification;
-      AndroidNotification? android = message.notification?.android;
-      if (android != null) {
-        flutterLocalNotificationsPlugin.show(
-          notification.hashCode,
-          notification!.title,
-          notification.body,
-          NotificationDetails(
-            android: AndroidNotificationDetails(
-              channel.id,
-              channel.name,
-              color: primaryColor,
-              playSound: true,
-              icon: '@mipmap/ic_launcher',
-            ),
-          ),
-        );
-      }
-    }
-  });
+  requestPermission();
+  listenMessage();
 
   initializeDateFormatting().then((_) => runApp(const App()));
 }
@@ -101,4 +44,51 @@ class App extends StatelessWidget {
       home: Loading(),
     );
   }
+}
+
+void requestPermission() async {
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+  NotificationSettings settings = await messaging.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: false,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
+
+  // ignore: avoid_print
+  print('User granted permission: ${settings.authorizationStatus}');
+}
+
+void listenMessage() async {
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    if (message.notification != null) {
+      // ignore: avoid_print
+      print('Message also contained a notification: ${message.notification}');
+
+      RemoteNotification? notification = message.notification;
+      flutterLocalNotificationsPlugin.show(
+        notification.hashCode,
+        notification!.title,
+        notification.body,
+        NotificationDetails(
+          android: AndroidNotificationDetails(
+            channel.id,
+            channel.name,
+            color: primaryColor,
+            playSound: true,
+            icon: '@mipmap/ic_launcher',
+          ),
+        ),
+      );
+    }
+
+    if (message.notification != null) {
+      // ignore: avoid_print
+      print('Message also contained a notification: ${message.notification}');
+    }
+  });
 }

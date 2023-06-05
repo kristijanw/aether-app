@@ -14,42 +14,42 @@ class PostCard extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    return Padding(
-      padding: const EdgeInsets.all(0.0),
-      child: Container(
-        padding: EdgeInsets.all(size.width * 0.04),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: const BorderRadius.all(
-            Radius.circular(10.0),
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => PostView(post: post),
+            maintainState: false,
           ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.2),
-              spreadRadius: 5,
-              blurRadius: 7,
-              offset: const Offset(0, 3),
+        );
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(0.0),
+        child: Container(
+          padding: EdgeInsets.all(size.width * 0.04),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: const BorderRadius.all(
+              Radius.circular(10.0),
             ),
-          ],
-        ),
-        margin: const EdgeInsets.only(bottom: 10),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => PostView(post: post),
-                          maintainState: false,
-                        ),
-                      );
-                    },
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.2),
+                spreadRadius: 5,
+                blurRadius: 7,
+                offset: const Offset(0, 3),
+              ),
+            ],
+          ),
+          margin: const EdgeInsets.only(bottom: 10),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
                     child: Text(
                       '${post.title}',
                       style: GoogleFonts.montserrat(
@@ -63,44 +63,34 @@ class PostCard extends StatelessWidget {
                       maxLines: 1,
                     ),
                   ),
-                ),
-                SizedBox(
-                  width: size.width * 0.10,
-                ),
-                Tooltip(
-                  message: post.priority ?? '',
-                  verticalOffset: -50,
-                  triggerMode: TooltipTriggerMode.tap,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 5,
-                      horizontal: 10,
-                    ),
-                    decoration: BoxDecoration(
-                      color: priorityBgColor(post.priority.toString()),
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(10.0),
+                  SizedBox(
+                    width: size.width * 0.10,
+                  ),
+                  Tooltip(
+                    message: post.priority ?? '',
+                    verticalOffset: -50,
+                    triggerMode: TooltipTriggerMode.tap,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 5,
+                        horizontal: 10,
+                      ),
+                      decoration: BoxDecoration(
+                        color: priorityBgColor(post.priority.toString()),
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(10.0),
+                        ),
+                      ),
+                      child: Icon(
+                        Icons.info_outline,
+                        size: size.width * 0.04,
+                        color: Colors.white,
                       ),
                     ),
-                    child: Icon(
-                      Icons.info_outline,
-                      size: size.width * 0.04,
-                      color: Colors.white,
-                    ),
                   ),
-                ),
-              ],
-            ),
-            GestureDetector(
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => PostView(post: post),
-                    maintainState: false,
-                  ),
-                );
-              },
-              child: Column(
+                ],
+              ),
+              Column(
                 children: [
                   SizedBox(
                     height: size.height * 0.02,
@@ -209,8 +199,8 @@ class PostCard extends StatelessWidget {
                   ),
                 ],
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
