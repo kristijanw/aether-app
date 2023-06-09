@@ -18,7 +18,7 @@ class PostCard extends StatelessWidget {
       onTap: () {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => PostView(post: post),
+            builder: (context) => PostView(postID: post.id),
             maintainState: false,
           ),
         );
@@ -139,6 +139,30 @@ class PostCard extends StatelessWidget {
                       ),
                     ],
                   ),
+                  if (post.repairman != null) ...{
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.settings,
+                                size: size.width * 0.05,
+                              ),
+                              Text(
+                                '${post.repairman!.name}',
+                                style: GoogleFonts.montserrat(
+                                  textStyle: TextStyle(
+                                    fontSize: size.width * 0.03,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  },
                   if (post.arrival != null || post.time != null) ...{
                     SizedBox(
                       height: size.height * 0.02,

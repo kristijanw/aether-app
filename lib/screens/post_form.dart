@@ -32,6 +32,7 @@ class _PostFormState extends State<PostForm> {
   bool newDevice = false;
   List<String> list = <String>[
     'odaberi uređaj',
+    'dodaj novi',
     'Uređaj 1',
     'Uređaj 2',
     'Uređaj 3',

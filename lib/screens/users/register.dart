@@ -51,15 +51,10 @@ class _RegisterState extends State<Register> {
 
   // Save and redirect to home
   void _saveAndRedirectToHome(User user) async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    await pref.setString('token', user.token ?? '');
-    await pref.setString('role', user.role ?? '');
-    await pref.setInt('userId', user.id ?? 0);
-
     if (!mounted) return;
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(
-        builder: (context) => const BottomNavigation(),
+        builder: (context) => const Login(),
       ),
       (route) => false,
     );

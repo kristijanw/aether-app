@@ -128,7 +128,7 @@ class _MyListState extends State<MyList> {
                           });
                         },
                         decoration: kInputDecoration(
-                          'Filter po nazivu ili korisniku',
+                          'Filter po nazivu ili korisniku ili serviseru',
                         ),
                       ),
                       const SizedBox(
@@ -144,9 +144,12 @@ class _MyListState extends State<MyList> {
                                 (post.title!
                                         .toLowerCase()
                                         .contains(filterText.toLowerCase()) ||
-                                    post.user!.name!
-                                        .toLowerCase()
-                                        .contains(filterText.toLowerCase()))) {
+                                    (post.repairman != null &&
+                                        post.repairman!.name != null &&
+                                        post.repairman!.name!
+                                            .toLowerCase()
+                                            .contains(
+                                                filterText.toLowerCase())))) {
                               return true;
                             } else {
                               return false;
@@ -156,9 +159,12 @@ class _MyListState extends State<MyList> {
                                 (post.title!
                                         .toLowerCase()
                                         .contains(filterText.toLowerCase()) ||
-                                    post.user!.name!
-                                        .toLowerCase()
-                                        .contains(filterText.toLowerCase()))) {
+                                    (post.repairman != null &&
+                                        post.repairman!.name != null &&
+                                        post.repairman!.name!
+                                            .toLowerCase()
+                                            .contains(
+                                                filterText.toLowerCase())))) {
                               return true;
                             } else {
                               return false;
@@ -168,9 +174,12 @@ class _MyListState extends State<MyList> {
                                 (post.title!
                                         .toLowerCase()
                                         .contains(filterText.toLowerCase()) ||
-                                    post.user!.name!
-                                        .toLowerCase()
-                                        .contains(filterText.toLowerCase()))) {
+                                    (post.repairman != null &&
+                                        post.repairman!.name != null &&
+                                        post.repairman!.name!
+                                            .toLowerCase()
+                                            .contains(
+                                                filterText.toLowerCase())))) {
                               return true;
                             } else {
                               return false;
@@ -179,9 +188,11 @@ class _MyListState extends State<MyList> {
                             return (post.title!
                                     .toLowerCase()
                                     .contains(filterText.toLowerCase()) ||
-                                post.user!.name!
-                                    .toLowerCase()
-                                    .contains(filterText.toLowerCase()));
+                                (post.repairman != null &&
+                                    post.repairman!.name != null &&
+                                    post.repairman!.name!
+                                        .toLowerCase()
+                                        .contains(filterText.toLowerCase())));
                           }
                         }).map((item) {
                           Post post = Post.fromJson(item);

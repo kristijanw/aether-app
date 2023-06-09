@@ -12,6 +12,14 @@ Future<ApiResponse> getPosts() async {
   return apiResponse;
 }
 
+Future<ApiResponse> getPostByIDServices(int postid) async {
+  String url = '$getPostByIdURL/$postid';
+
+  final apiResponse = await apiCallGet(url, 'getPostByID');
+
+  return apiResponse;
+}
+
 Future<ApiResponse> getPostsStatus(String status) async {
   String url = '$myPostsStatus/$status';
 
