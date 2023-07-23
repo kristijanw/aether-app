@@ -1,13 +1,11 @@
 import 'package:app/constant.dart';
 import 'package:app/models/api_response.dart';
 import 'package:app/models/user.dart';
-import 'package:app/screens/bottom_navigation.dart';
 import 'package:app/screens/users/login.dart';
 import 'package:app/services/user_service.dart';
 import 'package:app/widgets/widget_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Register extends StatefulWidget {
   const Register({super.key});

@@ -20,11 +20,11 @@ class _NewUserFromListState extends State<NewUserFromList> {
         foregroundColor: Colors.white,
         centerTitle: true,
       ),
-      body: SafeArea(
+      body: const SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(20),
+          padding: EdgeInsets.all(20),
           child: Column(
-            children: const [
+            children: [
               NewUser(),
             ],
           ),

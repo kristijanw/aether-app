@@ -19,17 +19,69 @@ class ListUsers extends StatefulWidget {
 }
 
 class _ListUsersState extends State<ListUsers> {
+  ScrollController scrollController = ScrollController();
   List<dynamic> usersList = [];
   bool _loading = true;
+  String searchByName = '';
+  int currentPage = 1;
 
-  Future<void> fetchAllUsers() async {
-    ApiResponse response = await getAllUsers();
+  Future<void> searchUsers() async {
+    ApiResponse response = await searchUsersByName(searchByName);
     final data = jsonEncode(response.data);
-    final responseJson = jsonDecode(data)['users'];
+
+    if (jsonDecode(data) == null) {
+      setState(() {
+        if (currentPage == 1) {
+          usersList = jsonDecode(data)['users'];
+        } else {
+          usersList.addAll(jsonDecode(data)['users']);
+        }
+        _loading = _loading ? !_loading : _loading;
+      });
+    }
 
     if (response.error == null) {
       setState(() {
-        usersList = responseJson;
+        usersList = jsonDecode(data)['users'];
+      });
+    } else if (response.error == unauthorized) {
+      logout().then(
+        (value) => {
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+              builder: (context) => const Login(),
+            ),
+            (route) => false,
+          )
+        },
+      );
+    } else {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('${response.error}'),
+      ));
+    }
+  }
+
+  Future<void> fetchAllUsers() async {
+    ApiResponse response = await getAllUsers(currentPage);
+    final data = jsonEncode(response.data);
+
+    if (jsonDecode(data) == null) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('${response.error}'),
+      ));
+      return;
+    }
+
+    if (response.error == null) {
+      setState(() {
+        if (currentPage == 1) {
+          usersList = jsonDecode(data)['users']['data'];
+        } else {
+          usersList.addAll(jsonDecode(data)['users']['data']);
+        }
         _loading = _loading ? !_loading : _loading;
       });
     } else if (response.error == unauthorized) {
@@ -75,10 +127,27 @@ class _ListUsersState extends State<ListUsers> {
     }
   }
 
+  void scrollListener() async {
+    scrollController.addListener(() {
+      if (scrollController.position.pixels ==
+          scrollController.position.maxScrollExtent) {
+        currentPage++;
+        fetchAllUsers();
+      }
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     fetchAllUsers();
+    scrollListener();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    scrollController;
   }
 
   @override
@@ -89,12 +158,19 @@ class _ListUsersState extends State<ListUsers> {
         ? const Center(child: CircularProgressIndicator())
         : Scaffold(
             body: RefreshIndicator(
-              onRefresh: () => fetchAllUsers(),
+              onRefresh: () async {
+                currentPage = 1;
+                usersList.clear();
+                await fetchAllUsers();
+              },
               child: SafeArea(
                 child: SingleChildScrollView(
+                  controller: scrollController,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
-                        vertical: 35, horizontal: 20),
+                      vertical: 35,
+                      horizontal: 20,
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -102,9 +178,40 @@ class _ListUsersState extends State<ListUsers> {
                         SizedBox(
                           height: size.height * 0.02,
                         ),
+                        TextFormField(
+                          onChanged: (value) {
+                            setState(() {
+                              searchByName = value;
+                            });
+
+                            if (value.length > 3) {
+                              searchUsers();
+                            }
+
+                            if (value.isEmpty) {
+                              fetchAllUsers();
+                            }
+                          },
+                          decoration: kInputDecoration(
+                            'Pretraži korisnike',
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: usersList.map((item) {
+                          children: usersList.where((el) {
+                            User user = User.fromJson(el);
+
+                            if (searchByName != '') {
+                              return user.name!
+                                  .toLowerCase()
+                                  .contains(searchByName.toLowerCase());
+                            }
+
+                            return true;
+                          }).map((item) {
                             User user = User.fromJson(item);
 
                             return GestureDetector(
@@ -142,11 +249,13 @@ class _ListUsersState extends State<ListUsers> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text(
-                                          '${user.name}',
-                                          style: GoogleFonts.montserrat(
-                                            textStyle: TextStyle(
-                                              fontSize: size.height * 0.018,
+                                        Expanded(
+                                          child: Text(
+                                            '${user.name}',
+                                            style: GoogleFonts.montserrat(
+                                              textStyle: TextStyle(
+                                                fontSize: size.height * 0.018,
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -174,7 +283,7 @@ class _ListUsersState extends State<ListUsers> {
                                       ],
                                     ),
                                     SizedBox(
-                                      height: size.height * 0.005,
+                                      height: size.height * 0.01,
                                     ),
                                     Row(
                                       mainAxisAlignment:

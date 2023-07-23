@@ -4,13 +4,14 @@ import 'package:google_fonts/google_fonts.dart';
 
 // https://staging.aether.hr/backend/api
 // http://192.168.1.7:8000/api
-const baseURL = 'https://staging.aether.hr/backend/api';
+const baseURL = 'http://192.168.1.9:8000/api';
 const loginURL = '$baseURL/login';
 const registerURL = '$baseURL/register';
 const registerNewURL = '$baseURL/register-new';
 const logoutURL = '$baseURL/logout';
 const userURL = '$baseURL/user';
 const allUsersURL = '$baseURL/all-users';
+const searchUser = '$baseURL/search-user';
 const deleteUserURL = '$baseURL/user';
 const postsURL = '$baseURL/posts';
 const getPostByIdURL = '$baseURL/posts';

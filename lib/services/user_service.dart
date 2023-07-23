@@ -180,13 +180,43 @@ Future<ApiResponse> updateUser(Map userData) async {
 }
 
 // All users
-Future<ApiResponse> getAllUsers() async {
+Future<ApiResponse> getAllUsers(int page) async {
   ApiResponse apiResponse = ApiResponse();
 
   try {
     String token = await getToken();
+
     final response = await http.get(
-      Uri.parse(allUsersURL),
+      Uri.parse('$allUsersURL?page=$page'),
+      headers: {'Accept': 'application/json', 'Authorization': 'Bearer $token'},
+    );
+
+    switch (response.statusCode) {
+      case 200:
+        apiResponse.data = jsonDecode(response.body);
+        break;
+      case 401:
+        apiResponse.error = unauthorized;
+        break;
+      default:
+        apiResponse.error = somethingWentWrong;
+        break;
+    }
+  } catch (e) {
+    apiResponse.error = serverError;
+  }
+  return apiResponse;
+}
+
+// search users
+Future<ApiResponse> searchUsersByName(String name) async {
+  ApiResponse apiResponse = ApiResponse();
+
+  try {
+    String token = await getToken();
+
+    final response = await http.get(
+      Uri.parse('$searchUser/$name'),
       headers: {'Accept': 'application/json', 'Authorization': 'Bearer $token'},
     );
 

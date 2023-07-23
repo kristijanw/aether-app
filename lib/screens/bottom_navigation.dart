@@ -62,8 +62,6 @@ class _BottomNavigationState extends State<BottomNavigation> {
   void initState() {
     super.initState();
     getRoleName();
-
-    print(roleName);
   }
 
   @override
