@@ -50,6 +50,10 @@ class _PostFormAdminState extends State<PostFormAdmin> {
     'visoka',
   ];
   List listServiser = [];
+  String searchByName = '';
+  late String userValue;
+  late int userIDValue;
+  List usersList = [];
   late String serviserValue;
   late int serviserIDValue;
   late String dropdownValue;
@@ -134,12 +138,67 @@ class _PostFormAdminState extends State<PostFormAdmin> {
     }
   }
 
+  void setUserDrop() async {
+    usersList.add({
+      "id": 0,
+      "name": 'Odaberi korisnika',
+    });
+
+    setState(() {
+      userValue = usersList.first['name'];
+      userIDValue = usersList.first['id'];
+    });
+  }
+
+  Future<void> searchUsers(String name) async {
+    ApiResponse response = await searchUsersByName(name);
+    final data = jsonEncode(response.data);
+
+    if (response.error == null) {
+      usersList.clear();
+
+      usersList.add({
+        "id": 0,
+        "name": 'Odaberi korisnika',
+      });
+
+      for (var user in jsonDecode(data)['users']) {
+        usersList.add({
+          "id": user['id'],
+          "name": user['name'],
+        });
+      }
+
+      setState(() {
+        userValue = usersList.first['name'];
+        userIDValue = usersList.first['id'];
+      });
+    } else if (response.error == unauthorized) {
+      logout().then(
+        (value) => {
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+              builder: (context) => const Login(),
+            ),
+            (route) => false,
+          )
+        },
+      );
+    } else {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('${response.error}'),
+      ));
+    }
+  }
+
   void _createPost() async {
     String? image = _imageFile == null ? null : getStringImage(_imageFile);
 
     Map<String, String> createDataPost = {
       'title': _txtControllerTitle.text,
       'body': _txtControllerBody.text,
+      'user_id': userIDValue.toString(),
       'image': image ?? '',
       'name_device': newDevice != true
           ? dropdownValue.toString()
@@ -216,6 +275,7 @@ class _PostFormAdminState extends State<PostFormAdmin> {
     dropdownValue = list.first;
     priorityValue = priority.first;
     getRepairMansAll();
+    setUserDrop();
   }
 
   @override
@@ -260,6 +320,89 @@ class _PostFormAdminState extends State<PostFormAdmin> {
               padding: const EdgeInsets.only(top: 20),
               child: Column(
                 children: [
+                  TextFormField(
+                    onChanged: (value) {
+                      setState(() {
+                        searchByName = value;
+                      });
+
+                      if (value.length > 3) {
+                        searchUsers(value);
+                      }
+                    },
+                    decoration: const InputDecoration(
+                      hintText: "Pretraži korisnike",
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          width: 1,
+                          color: Colors.black38,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  DropdownButtonFormField(
+                    value: userValue,
+                    hint: const Text(
+                      'odaberi korisnika',
+                    ),
+                    isExpanded: true,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          width: 1,
+                          color: Colors.black38,
+                        ),
+                      ),
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        userValue = value.toString();
+                      });
+
+                      for (var user in usersList) {
+                        if (userValue == user['name']) {
+                          setState(() {
+                            userIDValue = user['id'];
+                          });
+                        }
+                      }
+                    },
+                    onSaved: (value) {
+                      setState(() {
+                        userValue = value.toString();
+                      });
+
+                      for (var user in usersList) {
+                        if (userValue == user['name']) {
+                          setState(() {
+                            userIDValue = user['id'];
+                          });
+                        }
+                      }
+                    },
+                    validator: (value) {
+                      if (value.toString().isEmpty ||
+                          value.toString() == 'Odaberi korisnika') {
+                        return "Korisnik mora biti odabran";
+                      } else {
+                        return null;
+                      }
+                    },
+                    items: usersList.map((user) {
+                      return DropdownMenuItem(
+                        value: user['name'],
+                        child: Text(
+                          user['name'],
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
                   TextFormField(
                     controller: _txtControllerTitle,
                     validator: (val) =>
