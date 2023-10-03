@@ -1,4 +1,3 @@
-import 'package:app/constant.dart';
 import 'package:app/firebase_options.dart';
 import 'package:app/screens/loading.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -8,15 +7,9 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
-const AndroidNotificationChannel channel = AndroidNotificationChannel(
-  'dbaether', // id
-  'dbaether', // title
-  importance: Importance.high,
-  playSound: true,
-);
+import 'services/local_notif.dart';
 
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
+FlutterLocalNotificationsPlugin locNotf = FlutterLocalNotificationsPlugin();
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
@@ -24,6 +17,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  LocalNotification.init(locNotf);
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -74,20 +68,10 @@ void listenMessage() async {
       // ignore: avoid_print
       print('Message also contained a notification: ${message.notification}');
 
-      RemoteNotification? notification = message.notification;
-      flutterLocalNotificationsPlugin.show(
-        notification.hashCode,
-        notification!.title,
-        notification.body,
-        NotificationDetails(
-          android: AndroidNotificationDetails(
-            channel.id,
-            channel.name,
-            color: primaryColor,
-            playSound: true,
-            icon: '@mipmap/ic_launcher',
-          ),
-        ),
+      LocalNotification.showNotification(
+        title: message.notification!.title ?? 'Title',
+        body: message.notification!.body ?? 'Body',
+        flutterLocalNotificationsPlugin: locNotf,
       );
     }
 
