@@ -12,6 +12,8 @@ import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../services/device.dart';
+
 // ignore: must_be_immutable
 class PostFormAdmin extends StatefulWidget {
   PostFormAdmin({super.key, this.selectedDate, required this.dialogContext});
@@ -37,11 +39,6 @@ class _PostFormAdminState extends State<PostFormAdmin> {
   bool newDevice = false;
   List<String> list = <String>[
     'odaberi uređaj',
-    'dodaj novi',
-    'Uređaj 1',
-    'Uređaj 2',
-    'Uređaj 3',
-    'Uređaj 4'
   ];
   List<String> priority = <String>[
     'važnost servisa',
@@ -269,9 +266,22 @@ class _PostFormAdminState extends State<PostFormAdmin> {
     }
   }
 
+  Future getDevices() async {
+    ApiResponse response = await getAllDevices();
+
+    if (response.error == null) {
+      final data = jsonEncode(response.data);
+
+      for (var device in jsonDecode(data)['posts']) {
+        list.add(device['device']);
+      }
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+    getDevices();
     dropdownValue = list.first;
     priorityValue = priority.first;
     getRepairMansAll();

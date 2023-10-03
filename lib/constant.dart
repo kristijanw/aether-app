@@ -29,6 +29,7 @@ const saveTokenUrl = '$baseURL/update-token';
 const removeTokenUrl = '$baseURL/remove-token';
 const sendNotificationAdminUrl = '$baseURL/send-notification-all';
 const sendNotificationUrl = '$baseURL/send-notification';
+const getDevices = '$baseURL/devices';
 
 const primaryColor = Color.fromRGBO(196, 0, 117, 1);
 

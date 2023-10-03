@@ -1,9 +1,11 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:app/constant.dart';
 import 'package:app/models/api_response.dart';
 import 'package:app/screens/bottom_navigation.dart';
 import 'package:app/screens/users/login.dart';
+import 'package:app/services/device.dart';
 import 'package:app/services/notification.dart';
 import 'package:app/services/posts_services.dart';
 import 'package:app/services/user_service.dart';
@@ -32,11 +34,6 @@ class _PostFormState extends State<PostForm> {
   bool newDevice = false;
   List<String> list = <String>[
     'odaberi uređaj',
-    'dodaj novi',
-    'Uređaj 1',
-    'Uređaj 2',
-    'Uređaj 3',
-    'Uređaj 4'
   ];
   late String dropdownValue;
   bool isChecked = false;
@@ -140,10 +137,18 @@ class _PostFormState extends State<PostForm> {
     }
   }
 
+  Future getDevices() async {
+    ApiResponse response = await getAllDevices();
+
+    log('TU SAM');
+    log('$response');
+  }
+
   @override
   void initState() {
     super.initState();
     getRoleName();
+    getDevices();
     dropdownValue = list.first;
   }
 
