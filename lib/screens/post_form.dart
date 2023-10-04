@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:app/constant.dart';
@@ -35,6 +34,7 @@ class _PostFormState extends State<PostForm> {
   bool newDevice = false;
   List<String> list = <String>[
     'odaberi uređaj',
+    'dodaj novi',
   ];
   late String dropdownValue;
   bool isChecked = false;

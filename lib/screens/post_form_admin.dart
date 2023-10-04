@@ -39,6 +39,7 @@ class _PostFormAdminState extends State<PostFormAdmin> {
   bool newDevice = false;
   List<String> list = <String>[
     'odaberi uređaj',
+    'dodaj novi',
   ];
   List<String> priority = <String>[
     'važnost servisa',

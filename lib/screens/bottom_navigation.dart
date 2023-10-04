@@ -92,7 +92,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
           : Container(),
       floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
       bottomNavigationBar: BottomAppBar(
-        height: size.height * 0.07,
+        height: size.height * 0.1,
         notchMargin: 10,
         clipBehavior: Clip.antiAlias,
         shape: const CircularNotchedRectangle(),
