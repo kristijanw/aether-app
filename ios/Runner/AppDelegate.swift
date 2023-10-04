@@ -1,7 +1,5 @@
 import UIKit
 import Flutter
-import Firebase
-import FirebaseMessaging
 
 import flutter_local_notifications
 
@@ -11,7 +9,6 @@ import flutter_local_notifications
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
-    FirebaseApp.configure()
 
     FlutterLocalNotificationsPlugin.setPluginRegistrantCallback { (registry) in
     GeneratedPluginRegistrant.register(with: registry)}
@@ -23,11 +20,5 @@ import flutter_local_notifications
       }
 
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
-  }
-
-  override func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-    Messaging.messaging().apnsToken = deviceToken
-    print("Token: \(deviceToken)")
-    super.application(application, didRegisterForRemoteNotificationsWithDeviceToken: deviceToken)
   }
 }

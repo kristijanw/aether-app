@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:app/firebase_options.dart';
 import 'package:app/screens/loading.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -25,6 +27,10 @@ void main() async {
 
   requestPermission();
   listenMessage();
+
+  FirebaseMessaging.instance.getToken().then((value) {
+    log("$value");
+  });
 
   initializeDateFormatting().then((_) => runApp(const App()));
 }

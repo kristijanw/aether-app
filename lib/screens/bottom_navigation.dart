@@ -66,12 +66,14 @@ class _BottomNavigationState extends State<BottomNavigation> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
     return Scaffold(
       body: screens[currentIndex],
       floatingActionButton: (roleName == 'korisnik')
           ? SizedBox(
               width: 50,
-              height: 50,
+              height: 60,
               child: FloatingActionButton(
                 mini: true,
                 elevation: 0,
@@ -90,7 +92,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
           : Container(),
       floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
       bottomNavigationBar: BottomAppBar(
-        height: 60,
+        height: size.height * 0.07,
         notchMargin: 10,
         clipBehavior: Clip.antiAlias,
         shape: const CircularNotchedRectangle(),
