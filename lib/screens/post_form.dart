@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
@@ -140,8 +141,13 @@ class _PostFormState extends State<PostForm> {
   Future getDevices() async {
     ApiResponse response = await getAllDevices();
 
-    log('TU SAM');
-    log('$response');
+    if (response.error == null) {
+      final data = jsonEncode(response.data);
+
+      for (var device in jsonDecode(data)['posts']) {
+        list.add(device['device']);
+      }
+    }
   }
 
   @override
