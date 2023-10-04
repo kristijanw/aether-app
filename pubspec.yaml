@@ -29,6 +29,7 @@ dependencies:
   firebase_core: ^2.11.0
   firebase_messaging: ^14.5.0
   flutter_local_notifications: ^14.0.0+1
+  rename: ^3.0.0
 
 dev_dependencies:
   flutter_test:
