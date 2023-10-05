@@ -30,6 +30,11 @@
 	<string>Ova aplikacija koristi notifikacije kako bi vam pružila ažurirane informacije i obavijesti o vašim servisima.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
