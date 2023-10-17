@@ -59,11 +59,11 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyBQ9J5CS92ErnPvN8InTB43dmFMEn8Aq_A',
-    appId: '1:946008426809:ios:b0f767e82bed6bf98980e8',
+    appId: '1:946008426809:ios:5e7fbfa8dd4c72568980e8',
     messagingSenderId: '946008426809',
     projectId: 'aethernotification',
     storageBucket: 'aethernotification.appspot.com',
     iosClientId: '946008426809-n9tf32up39q6gq2od5ldf9aacti7828k.apps.googleusercontent.com',
-    iosBundleId: 'com.example.app',
+    iosBundleId: 'prospekt.aether.com',
   );
 }
