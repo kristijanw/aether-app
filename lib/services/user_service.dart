@@ -54,9 +54,10 @@ Future<ApiResponse> login(String email, String password) async {
 // Register
 Future<ApiResponse> register(Map dataPost) async {
   ApiResponse apiResponse = ApiResponse();
+
   try {
     final response = await http.post(
-      Uri.parse(registerURL),
+      Uri.parse('https://aether.hr/backend/api/register'),
       headers: {'Accept': 'application/json'},
       body: dataPost,
     );
@@ -77,6 +78,7 @@ Future<ApiResponse> register(Map dataPost) async {
     log('register');
     apiResponse.error = serverError;
   }
+
   return apiResponse;
 }
 

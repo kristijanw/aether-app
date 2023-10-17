@@ -1,6 +1,7 @@
 import 'package:app/constant.dart';
 import 'package:app/models/api_response.dart';
 import 'package:app/models/user.dart';
+import 'package:app/screens/users/load_all_users_register.dart';
 import 'package:app/screens/users/login.dart';
 import 'package:app/services/user_service.dart';
 import 'package:app/widgets/widget_title.dart';
@@ -22,6 +23,13 @@ class _RegisterState extends State<Register> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController passwordConfirmController = TextEditingController();
+  int choiseUser = 0;
+
+  void setChoiseUser(int id) async {
+    setState(() {
+      choiseUser = id;
+    });
+  }
 
   void _registerUser() async {
     Map<String, dynamic> dataPost = {
@@ -29,6 +37,7 @@ class _RegisterState extends State<Register> {
       'email': emailController.text,
       'password': passwordController.text,
       'password_confirmation': passwordConfirmController.text,
+      'choise_user': choiseUser == 0 ? null : choiseUser.toString()
     };
 
     ApiResponse response = await register(dataPost);
@@ -59,6 +68,11 @@ class _RegisterState extends State<Register> {
   }
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
@@ -69,20 +83,27 @@ class _RegisterState extends State<Register> {
             children: [
               SvgPicture.asset(
                 'assets/logo.svg',
-                width: 100,
+                width: 80,
               ),
               const SizedBox(
-                height: 30,
+                height: 20,
               ),
               WidgetTitle(title: 'Registracija'),
               const SizedBox(
-                height: 30,
+                height: 20,
               ),
               Expanded(
                 child: Form(
                   key: formKey,
                   child: ListView(
+                    padding: const EdgeInsets.only(
+                      bottom: 30,
+                    ),
                     children: [
+                      LoadAllUsersWidget(setChoiseUser: setChoiseUser),
+                      const SizedBox(
+                        height: 20,
+                      ),
                       TextFormField(
                         controller: nameController,
                         validator: (val) =>

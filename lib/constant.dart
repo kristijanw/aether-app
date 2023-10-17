@@ -30,6 +30,7 @@ const removeTokenUrl = '$baseURL/remove-token';
 const sendNotificationAdminUrl = '$baseURL/send-notification-all';
 const sendNotificationUrl = '$baseURL/send-notification';
 const getDevices = '$baseURL/devices';
+const loadAllUsersUrl = '$baseURL/load-users';
 
 const primaryColor = Color.fromRGBO(196, 0, 117, 1);
 
