@@ -31,6 +31,7 @@ const sendNotificationAdminUrl = '$baseURL/send-notification-all';
 const sendNotificationUrl = '$baseURL/send-notification';
 const getDevices = '$baseURL/devices';
 const loadAllUsersUrl = '$baseURL/load-users';
+const updatePasswordUrl = '$baseURL/update-password';
 
 const primaryColor = Color.fromRGBO(196, 0, 117, 1);
 

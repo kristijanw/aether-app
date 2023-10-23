@@ -287,8 +287,7 @@ class _PostLogsState extends State<PostLogs> {
                 ),
               ),
             ),
-            if (widget.roleName == 'admin' ||
-                widget.roleName == 'serviser') ...{
+            if (widget.roleName == 'admin') ...{
               TextButton(
                 style: TextButton.styleFrom(
                   backgroundColor: Colors.green,
@@ -360,8 +359,7 @@ class _PostLogsState extends State<PostLogs> {
                               ),
                             ),
                           ),
-                          if (widget.roleName == 'admin' ||
-                              widget.roleName == 'serviser') ...{
+                          if (widget.roleName == 'admin') ...{
                             TextButton(
                               style: TextButton.styleFrom(
                                 backgroundColor: Colors.red,

@@ -181,6 +181,34 @@ Future<ApiResponse> updateUser(Map userData) async {
   return apiResponse;
 }
 
+Future<ApiResponse> updatePassword(Map userData) async {
+  ApiResponse apiResponse = ApiResponse();
+
+  try {
+    String token = await getToken();
+    final response = await http.put(
+      Uri.parse(updatePasswordUrl),
+      headers: {'Accept': 'application/json', 'Authorization': 'Bearer $token'},
+      body: userData,
+    );
+
+    switch (response.statusCode) {
+      case 200:
+        apiResponse.data = jsonDecode(response.body)['message'];
+        break;
+      case 401:
+        apiResponse.error = unauthorized;
+        break;
+      default:
+        apiResponse.error = somethingWentWrong;
+        break;
+    }
+  } catch (e) {
+    apiResponse.error = serverError;
+  }
+  return apiResponse;
+}
+
 // All users
 Future<ApiResponse> getAllUsers(int page) async {
   ApiResponse apiResponse = ApiResponse();

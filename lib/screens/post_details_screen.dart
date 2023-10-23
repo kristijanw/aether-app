@@ -84,7 +84,7 @@ class _PostViewState extends State<PostView> {
                 SizedBox(
                   height: size.height * 0.02,
                 ),
-                if (roleName == 'admin' || roleName == 'serviser') ...{
+                if (roleName == 'admin') ...{
                   const Divider(
                     height: 2,
                     color: primaryColor,
