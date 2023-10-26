@@ -287,7 +287,7 @@ class _PostLogsState extends State<PostLogs> {
                 ),
               ),
             ),
-            if (widget.roleName == 'admin') ...{
+            if (widget.roleName != 'korisnik') ...{
               TextButton(
                 style: TextButton.styleFrom(
                   backgroundColor: Colors.green,

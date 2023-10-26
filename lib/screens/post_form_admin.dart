@@ -554,7 +554,7 @@ class _PostFormAdminState extends State<PostFormAdmin> {
                   const SizedBox(
                     height: 10,
                   ),
-                  if (listServiser.isNotEmpty) ...{
+                  if (listServiser.isNotEmpty && roleName == 'admin') ...{
                     DropdownButtonFormField(
                       value: serviserValue,
                       hint: const Text(

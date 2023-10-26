@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:app/constant.dart';
 import 'package:app/models/api_response.dart';
 import 'package:app/models/user.dart';
@@ -129,6 +131,75 @@ class _ProfileState extends State<Profile> {
     }
   }
 
+  void deleteAccount() async {
+    ApiResponse response = await deleteUser(user!.id.toString());
+
+    setState(() {
+      loading = false;
+    });
+
+    if (response.error == null) {
+      if (!mounted) return;
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (context) => const Login(),
+        ),
+        (route) => false,
+      );
+    } else if (response.error == unauthorized) {
+      logout().then(
+        (value) => {
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+              builder: (context) => const Login(),
+            ),
+            (route) => false,
+          )
+        },
+      );
+    } else {
+      if (!mounted) return;
+      statusMessage('${response.error}', context, 'error');
+    }
+  }
+
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Brisanje računa'),
+          content: const SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Jeste li sigurni da želite obrisati račun?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            Row(
+              children: [
+                TextButton(
+                  child: const Text('Odustani'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                TextButton(
+                  child: const Text('Potvrdi'),
+                  onPressed: () {
+                    deleteAccount();
+                  },
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   void initState() {
     getUser();
@@ -152,24 +223,37 @@ class _ProfileState extends State<Profile> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       WidgetTitle(title: 'Moj Profil'),
-                      IconButton(
-                        icon: const Icon(
-                          Icons.exit_to_app,
-                          size: 35.0,
-                        ),
-                        onPressed: () {
-                          logout().then(
-                            (value) => {
-                              Navigator.of(context).pushAndRemoveUntil(
-                                MaterialPageRoute(
-                                  builder: (context) => const Login(),
-                                ),
-                                (route) => false,
-                              )
+                      Row(
+                        children: [
+                          IconButton(
+                            icon: const Icon(
+                              Icons.exit_to_app,
+                              size: 35.0,
+                            ),
+                            onPressed: () {
+                              logout().then(
+                                (value) => {
+                                  Navigator.of(context).pushAndRemoveUntil(
+                                    MaterialPageRoute(
+                                      builder: (context) => const Login(),
+                                    ),
+                                    (route) => false,
+                                  )
+                                },
+                              );
                             },
-                          );
-                        },
-                      ),
+                          ),
+                          IconButton(
+                            icon: const Icon(
+                              Icons.delete_forever_outlined,
+                              size: 35.0,
+                            ),
+                            onPressed: () {
+                              _showMyDialog();
+                            },
+                          ),
+                        ],
+                      )
                     ],
                   ),
                   SizedBox(
