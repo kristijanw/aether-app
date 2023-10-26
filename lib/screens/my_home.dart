@@ -51,6 +51,7 @@ class _MyHomeState extends State<MyHome> {
                   ),
                   PostFormAdmin(
                     selectedDate: _selectedDate,
+                    roleUser: user!.role.toString(),
                     dialogContext: context,
                   ),
                   Padding(

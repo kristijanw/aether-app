@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:app/constant.dart';
 import 'package:app/models/api_response.dart';
 import 'package:app/models/user.dart';

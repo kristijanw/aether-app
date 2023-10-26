@@ -16,9 +16,15 @@ import '../services/device.dart';
 
 // ignore: must_be_immutable
 class PostFormAdmin extends StatefulWidget {
-  PostFormAdmin({super.key, this.selectedDate, required this.dialogContext});
+  PostFormAdmin({
+    super.key,
+    this.selectedDate,
+    required this.dialogContext,
+    required this.roleUser,
+  });
 
   DateTime? selectedDate;
+  String roleUser;
   BuildContext dialogContext;
 
   @override
@@ -554,7 +560,8 @@ class _PostFormAdminState extends State<PostFormAdmin> {
                   const SizedBox(
                     height: 10,
                   ),
-                  if (listServiser.isNotEmpty && roleName == 'admin') ...{
+                  if (listServiser.isNotEmpty &&
+                      widget.roleUser == 'admin') ...{
                     DropdownButtonFormField(
                       value: serviserValue,
                       hint: const Text(
