@@ -28,6 +28,8 @@
 	<true/>
 	<key>NSLocalNotificationsUsageDescription</key>
 	<string>Ova aplikacija koristi notifikacije kako bi vam pružila ažurirane informacije i obavijesti o vašim servisima.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This app requires access to the photo library.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>
