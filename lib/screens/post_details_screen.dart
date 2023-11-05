@@ -84,34 +84,34 @@ class _PostViewState extends State<PostView> {
                 SizedBox(
                   height: size.height * 0.02,
                 ),
+                const Divider(
+                  height: 2,
+                  color: primaryColor,
+                ),
+                SizedBox(
+                  height: size.height * 0.02,
+                ),
+                SetDateTime(
+                  postid: post.id.toString(),
+                  post: post,
+                ),
                 if (roleName == 'admin') ...{
-                  const Divider(
-                    height: 2,
-                    color: primaryColor,
-                  ),
-                  SizedBox(
-                    height: size.height * 0.02,
-                  ),
-                  SetDateTime(
-                    postid: post.id.toString(),
-                    post: post,
-                  ),
                   SizedBox(
                     height: size.height * 0.02,
                   ),
                   SetRepairMan(
                     post: post,
                   ),
-                  SizedBox(
-                    height: size.height * 0.02,
-                  ),
-                  ChangeStatus(
-                    post: post,
-                  ),
-                  SizedBox(
-                    height: size.height * 0.04,
-                  ),
                 },
+                SizedBox(
+                  height: size.height * 0.02,
+                ),
+                ChangeStatus(
+                  post: post,
+                ),
+                SizedBox(
+                  height: size.height * 0.04,
+                ),
                 PostLogs(
                   post: post,
                   roleName: roleName,
